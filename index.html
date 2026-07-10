@@ -9,18 +9,18 @@
     <style>
         body { 
             font-family: 'Prompt', sans-serif; 
-            background-color: #0f172a; /* สีพื้นหลังเวลาเปิดในคอม */
+            background-color: #0f172a; 
             margin: 0; 
             display: flex; 
             justify-content: center;
-            align-items: center; /* จัดให้อยู่กึ่งกลางหน้าจอแนวตั้ง */
+            align-items: center; 
             min-height: 100vh;
         }
         .oswald { font-family: 'Oswald', sans-serif; }
         
         .app-container {
             width: 100%;
-            max-width: 430px; /* ล็อคความกว้างให้เท่ามือถือ */
+            max-width: 430px; 
             min-height: 100vh;
             background: radial-gradient(circle at 30% 20%, #cbcabf 0%, #a8a79a 45%, #7a796c 100%);
             color: white;
@@ -29,9 +29,9 @@
             box-shadow: 0 0 30px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
+            justify-content: space-between; /* กระจายเนื้อหาให้เต็มความสูงหน้าจอ */
         }
 
-        /* จำลองกรอบมือถือเมื่อเปิดบนจอคอมพิวเตอร์ (Desktop View) */
         @media (min-width: 480px) {
             .app-container {
                 height: 90vh;
@@ -39,11 +39,10 @@
                 min-height: auto;
                 border-radius: 40px;
                 border: 14px solid #1e293b;
-                overflow-y: auto; /* ให้เลื่อนดูในกรอบมือถือได้ */
+                overflow-y: auto; 
             }
         }
 
-        /* กล่องสีขาวหม่น แบบปุ่มกด 3 มิติ */
         .metal-box {
             background-color: #ecece6;
             border-radius: 20px;
@@ -59,15 +58,13 @@
             transition: transform 0.1s;
         }
 
-        .text-outline {
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
-        }
+        .text-outline { text-shadow: 1px 1px 3px rgba(0,0,0,0.6); }
+        .text-outline-heavy { text-shadow: 2px 2px 4px rgba(0,0,0,0.7); }
 
         .loading-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #27272a; z-index: 50; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* ซ่อน Scrollbar ของ Container */
         .app-container::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
 </head>
@@ -80,60 +77,73 @@
             <p class="font-bold tracking-widest animate-pulse">UPDATING RADAR...</p>
         </div>
 
-        <div class="flex justify-between items-start">
-            <div>
-                <h2 class="text-sm font-bold tracking-wide text-outline">BKK AIR FORCE ONE</h2>
-                <h1 class="text-5xl font-black mt-1 uppercase oswald tracking-tight leading-none text-outline">BANGKOK</h1>
-                <h1 class="text-5xl font-black uppercase oswald tracking-wide leading-none text-outline">REAL-TIME</h1>
+        <div>
+            <div class="flex justify-between items-start">
+                <div>
+                    <h2 class="text-sm font-bold tracking-wide text-outline">BKK AIR FORCE ONE</h2>
+                    <h1 class="text-[3.5rem] font-black mt-2 uppercase oswald tracking-tight leading-none text-outline-heavy">BANGKOK</h1>
+                    <h1 class="text-[3.5rem] font-black uppercase oswald tracking-wide leading-none text-outline-heavy">REAL-TIME</h1>
+                </div>
+                <div class="text-right flex flex-col items-end mt-2">
+                    <h2 class="text-4xl font-normal text-red-600 oswald tracking-wide drop-shadow-sm leading-none" id="time-display">00:00</h2>
+                    <p class="text-[13px] text-red-600 font-bold uppercase mt-1 mb-3" id="date-display">--</p>
+                    
+                    <div class="bg-black/10 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-1.5 shadow-inner flex flex-col items-center">
+                        <p class="text-[10px] font-bold text-white text-outline leading-tight">AVG TEMP</p>
+                        <p class="text-2xl font-bold text-red-600 oswald leading-none drop-shadow-md mt-1"><span id="avg-temp">--</span><span class="text-xs text-white"> °C</span></p>
+                    </div>
+                </div>
             </div>
-            <div class="text-right flex flex-col items-end">
-                <h2 class="text-4xl font-normal text-red-600 oswald tracking-wide drop-shadow-sm leading-none" id="time-display">00:00</h2>
-                <p class="text-[13px] text-red-600 font-bold uppercase mt-1 mb-2" id="date-display">--</p>
-                
-                <div class="bg-black/10 backdrop-blur-sm border border-white/20 rounded-lg px-3 py-1 shadow-inner flex flex-col items-center">
-                    <p class="text-[9px] font-bold text-white text-outline leading-tight">AVG TEMP</p>
-                    <p class="text-xl font-bold text-red-600 oswald leading-none drop-shadow-md mt-0.5"><span id="avg-temp">--</span><span class="text-[10px] text-white"> °C</span></p>
+
+            <div class="mt-5 flex items-center gap-3 bg-black/5 border border-white/10 rounded-xl p-3 shadow-inner">
+                <i id="w-icon" class="fa-solid fa-cloud text-3xl text-white drop-shadow-md"></i>
+                <div class="flex flex-col">
+                    <span class="text-[10px] text-white/80 font-bold uppercase tracking-widest text-outline">Weather Status</span>
+                    <span id="w-desc" class="text-xl font-bold text-white text-outline tracking-wide leading-none mt-1">กำลังประมวลผล...</span>
                 </div>
             </div>
         </div>
 
-        <div class="mt-6 flex justify-between items-end">
-            <div class="flex flex-col">
-                <div class="flex items-baseline">
-                    <span class="text-2xl font-bold mb-2 mr-2 text-outline">ฝนตก</span>
-                    <span class="text-8xl font-black text-red-600 oswald leading-none drop-shadow-md" id="rain-percent">0</span>
-                    <span class="text-4xl font-black text-outline oswald ml-1">%</span>
+        <div class="flex flex-col gap-6 w-full py-6 flex-grow justify-center">
+            
+            <div class="flex justify-between items-end w-full">
+                <div class="flex flex-col">
+                    <div class="flex items-baseline">
+                        <span class="text-3xl font-bold mb-2 mr-2 text-outline">ฝนตก</span>
+                        <span class="text-[6.5rem] font-black text-red-600 oswald leading-none drop-shadow-md" id="rain-percent">0</span>
+                        <span class="text-4xl font-black text-outline oswald ml-1">%</span>
+                    </div>
+                    <div class="bg-black/10 backdrop-blur-sm border border-white/20 rounded-lg p-2 mt-1 shadow-inner self-start min-w-[150px]">
+                        <p class="text-[10px] font-bold text-white text-outline leading-tight">เขตที่ฝนตกหนักสุด</p>
+                        <p class="text-[14px] font-bold text-red-600 drop-shadow-md mt-0.5 truncate" id="max-rain-dist">ไม่พบกลุ่มฝน</p>
+                    </div>
                 </div>
-                
-                <div class="bg-black/10 backdrop-blur-sm border border-white/20 rounded-lg p-2 mt-1 shadow-inner self-start min-w-[140px]">
-                    <p class="text-[9px] font-bold text-white text-outline leading-tight">เขตที่ฝนตกหนักสุด</p>
-                    <p class="text-[13px] font-bold text-red-600 drop-shadow-md mt-0.5 truncate" id="max-rain-dist">ไม่พบกลุ่มฝน</p>
+
+                <div class="text-right pb-1">
+                    <p class="text-sm font-bold mb-[-5px] text-outline">ปริมาณน้ำฝน</p>
+                    <div class="flex items-baseline justify-end">
+                        <span class="text-[5.5rem] font-black text-red-600 oswald drop-shadow-md leading-none" id="rain-amount">0.0</span> 
+                        <span class="text-2xl font-bold ml-2 text-outline">มม.</span>
+                    </div>
+                    <p class="text-[11px] font-bold mt-2 text-outline">ของพื้นที่กรุงเทพมหานคร</p>
                 </div>
             </div>
 
-            <div class="text-right pb-1">
-                <p class="text-sm font-bold mb-[-5px] text-outline">ปริมาณน้ำฝน</p>
-                <div class="flex items-baseline justify-end">
-                    <span class="text-6xl font-black text-red-600 oswald drop-shadow-md" id="rain-amount">0.0</span> 
-                    <span class="text-xl font-bold ml-2 text-outline">มม.</span>
+            <div class="flex justify-end gap-10 w-full mt-2">
+                <div class="text-center">
+                    <p class="text-[13px] font-bold mb-[-2px] text-outline">ความเร็วลม</p>
+                    <span class="text-5xl font-black text-red-600 oswald drop-shadow-md" id="wind-speed">0</span><br>
+                    <span class="text-[11px] font-bold uppercase text-outline">km/h</span>
                 </div>
-                <p class="text-[10px] font-bold mt-1 text-outline">ของพื้นที่กรุงเทพมหานคร</p>
+                <div class="text-center">
+                    <p class="text-[13px] font-bold mb-[-2px] text-outline">ทิศทางลม</p>
+                    <span class="text-5xl font-black text-red-600 oswald drop-shadow-md" id="wind-dir">--</span>
+                </div>
             </div>
+
         </div>
 
-        <div class="flex justify-end gap-8 mt-6 mb-8">
-            <div class="text-center">
-                <p class="text-sm font-bold mb-[-5px] text-outline">ความเร็วลม</p>
-                <span class="text-4xl font-black text-red-600 oswald drop-shadow-md" id="wind-speed">0</span><br>
-                <span class="text-[10px] font-bold uppercase text-outline">km/h</span>
-            </div>
-            <div class="text-center">
-                <p class="text-sm font-bold mb-[-5px] text-outline">ทิศทางลม</p>
-                <span class="text-4xl font-black text-red-600 oswald drop-shadow-md" id="wind-dir">--</span>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-3 gap-x-4 gap-y-3 flex-grow pb-4">
+        <div class="grid grid-cols-3 gap-x-4 gap-y-3 pb-2">
             
             <div class="flex flex-col items-center">
                 <p class="text-[11px] font-bold mb-2 text-outline text-center leading-tight whitespace-nowrap">จุดน้ำค้าง</p>
@@ -204,6 +214,18 @@
             return dirs[Math.round(deg / 45) % 8];
         }
 
+        // ตัวแปลงรหัสสภาพอากาศ (WMO Weather Code)
+        function getWeatherStatus(code) {
+            if (code === 0) return { text: "ฟ้าโปร่ง (Clear)", icon: "fa-sun", color: "text-yellow-400" };
+            if (code >= 1 && code <= 3) return { text: "มีเมฆบางส่วน (Partly Cloudy)", icon: "fa-cloud-sun", color: "text-gray-200" };
+            if (code === 45 || code === 48) return { text: "มีหมอก (Fog)", icon: "fa-smog", color: "text-gray-400" };
+            if ([51, 53, 55, 56, 57].includes(code)) return { text: "ฝนละออง (Drizzle)", icon: "fa-cloud-rain", color: "text-blue-300" };
+            if ([61, 63, 65, 66, 67].includes(code)) return { text: "ฝนตก (Rain)", icon: "fa-cloud-showers-heavy", color: "text-blue-400" };
+            if ([80, 81, 82].includes(code)) return { text: "ฝนตกหนัก (Heavy Rain)", icon: "fa-cloud-showers-water", color: "text-blue-600" };
+            if ([95, 96, 99].includes(code)) return { text: "พายุฝนฟ้าคะนอง (Thunderstorm)", icon: "fa-bolt", color: "text-yellow-500" };
+            return { text: "ไม่ทราบสถานะ", icon: "fa-cloud", color: "text-white" };
+        }
+
         const bkkDistricts = [
             {name: "พระนคร", lat: 13.76, lon: 100.49}, {name: "ป้อมปราบฯ", lat: 13.75, lon: 100.51}, {name: "ปทุมวัน", lat: 13.74, lon: 100.52}, {name: "บางรัก", lat: 13.73, lon: 100.52}, {name: "สาทร", lat: 13.71, lon: 100.52},
             {name: "ยานนาวา", lat: 13.69, lon: 100.54}, {name: "คลองเตย", lat: 13.71, lon: 100.58}, {name: "วัฒนา", lat: 13.74, lon: 100.58}, {name: "ราชเทวี", lat: 13.76, lon: 100.53}, {name: "พญาไท", lat: 13.78, lon: 100.54},
@@ -222,7 +244,8 @@
                 const lats = bkkDistricts.map(d => d.lat).join(',');
                 const lons = bkkDistricts.map(d => d.lon).join(',');
                 
-                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=precipitation,wind_speed_10m,wind_direction_10m,surface_pressure,temperature_2m,relative_humidity_2m,apparent_temperature,dew_point_2m&timezone=Asia/Bangkok`;
+                // เพิ่ม weather_code ในการดึงข้อมูล
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=precipitation,wind_speed_10m,wind_direction_10m,surface_pressure,temperature_2m,relative_humidity_2m,apparent_temperature,dew_point_2m,weather_code&timezone=Asia/Bangkok`;
                 const res = await fetch(url);
                 const data = await res.json();
 
@@ -260,8 +283,13 @@
             let rainPercent = Math.round((rainingDistricts / 50) * 100);
             let avgTemp = (sumTemp / 50).toFixed(1);
 
-            let centerCur = apiData[0].current;
+            let centerCur = apiData[0].current; // พิกัดพระนครเป็นตัวแทน Weather Code
             let aq = aqData.current;
+
+            // Weather Status Update
+            let weatherInfo = getWeatherStatus(centerCur.weather_code);
+            document.getElementById('w-icon').className = `fa-solid ${weatherInfo.icon} text-3xl drop-shadow-md ${weatherInfo.color}`;
+            document.getElementById('w-desc').innerText = weatherInfo.text;
 
             // Header Data
             document.getElementById('rain-percent').innerText = rainPercent;
@@ -269,7 +297,6 @@
             document.getElementById('wind-speed').innerText = centerCur.wind_speed_10m.toFixed(0);
             document.getElementById('wind-dir').innerText = getWindDir(centerCur.wind_direction_10m);
             
-            // New Added Boxes
             document.getElementById('avg-temp').innerText = avgTemp;
             document.getElementById('max-rain-dist').innerText = maxRain > 0 ? "เขต" + bkkDistricts[maxRainDistIndex].name : "ไม่มีฝนตก (Clear)";
             
