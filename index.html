@@ -9,18 +9,19 @@
     <style>
         body { 
             font-family: 'Prompt', sans-serif; 
-            background-color: #1a1a1a; 
+            background-color: #0f172a; /* สีพื้นหลังเวลาเปิดในคอม */
             margin: 0; 
             display: flex; 
             justify-content: center;
+            align-items: center; /* จัดให้อยู่กึ่งกลางหน้าจอแนวตั้ง */
+            min-height: 100vh;
         }
         .oswald { font-family: 'Oswald', sans-serif; }
         
         .app-container {
             width: 100%;
-            max-w: 430px; 
+            max-width: 430px; /* ล็อคความกว้างให้เท่ามือถือ */
             min-height: 100vh;
-            /* พื้นหลังสีเหล็กทหาร/เครื่องบิน */
             background: radial-gradient(circle at 30% 20%, #cbcabf 0%, #a8a79a 45%, #7a796c 100%);
             color: white;
             position: relative;
@@ -28,6 +29,18 @@
             box-shadow: 0 0 30px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
+        }
+
+        /* จำลองกรอบมือถือเมื่อเปิดบนจอคอมพิวเตอร์ (Desktop View) */
+        @media (min-width: 480px) {
+            .app-container {
+                height: 90vh;
+                max-height: 900px;
+                min-height: auto;
+                border-radius: 40px;
+                border: 14px solid #1e293b;
+                overflow-y: auto; /* ให้เลื่อนดูในกรอบมือถือได้ */
+            }
         }
 
         /* กล่องสีขาวหม่น แบบปุ่มกด 3 มิติ */
@@ -42,11 +55,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #1f2937; /* ตัวหนังสือสีเทาเข้มเกือบดำ */
+            color: #1f2937;
             transition: transform 0.1s;
         }
 
-        /* เงาข้อความสีขาวให้อ่านง่ายบนพื้นหลังสว่าง */
         .text-outline {
             text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
         }
@@ -54,6 +66,9 @@
         .loading-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #27272a; z-index: 50; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* ซ่อน Scrollbar ของ Container */
+        .app-container::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
 </head>
 <body>
@@ -71,25 +86,38 @@
                 <h1 class="text-5xl font-black mt-1 uppercase oswald tracking-tight leading-none text-outline">BANGKOK</h1>
                 <h1 class="text-5xl font-black uppercase oswald tracking-wide leading-none text-outline">REAL-TIME</h1>
             </div>
-            <div class="text-right">
-                <h2 class="text-4xl font-normal text-red-600 oswald tracking-wide drop-shadow-sm" id="time-display">00:00</h2>
-                <p class="text-[13px] text-red-600 font-bold uppercase mt-1" id="date-display">--</p>
+            <div class="text-right flex flex-col items-end">
+                <h2 class="text-4xl font-normal text-red-600 oswald tracking-wide drop-shadow-sm leading-none" id="time-display">00:00</h2>
+                <p class="text-[13px] text-red-600 font-bold uppercase mt-1 mb-2" id="date-display">--</p>
+                
+                <div class="bg-black/10 backdrop-blur-sm border border-white/20 rounded-lg px-3 py-1 shadow-inner flex flex-col items-center">
+                    <p class="text-[9px] font-bold text-white text-outline leading-tight">AVG TEMP</p>
+                    <p class="text-xl font-bold text-red-600 oswald leading-none drop-shadow-md mt-0.5"><span id="avg-temp">--</span><span class="text-[10px] text-white"> °C</span></p>
+                </div>
             </div>
         </div>
 
-        <div class="mt-8 flex justify-between items-end">
-            <div class="flex items-baseline">
-                <span class="text-2xl font-bold mb-2 mr-2 text-outline">ฝนตก</span>
-                <span class="text-8xl font-black text-red-600 oswald leading-none drop-shadow-md" id="rain-percent">0</span>
-                <span class="text-4xl font-black text-outline oswald ml-1">%</span>
+        <div class="mt-6 flex justify-between items-end">
+            <div class="flex flex-col">
+                <div class="flex items-baseline">
+                    <span class="text-2xl font-bold mb-2 mr-2 text-outline">ฝนตก</span>
+                    <span class="text-8xl font-black text-red-600 oswald leading-none drop-shadow-md" id="rain-percent">0</span>
+                    <span class="text-4xl font-black text-outline oswald ml-1">%</span>
+                </div>
+                
+                <div class="bg-black/10 backdrop-blur-sm border border-white/20 rounded-lg p-2 mt-1 shadow-inner self-start min-w-[140px]">
+                    <p class="text-[9px] font-bold text-white text-outline leading-tight">เขตที่ฝนตกหนักสุด</p>
+                    <p class="text-[13px] font-bold text-red-600 drop-shadow-md mt-0.5 truncate" id="max-rain-dist">ไม่พบกลุ่มฝน</p>
+                </div>
             </div>
+
             <div class="text-right pb-1">
                 <p class="text-sm font-bold mb-[-5px] text-outline">ปริมาณน้ำฝน</p>
                 <div class="flex items-baseline justify-end">
                     <span class="text-6xl font-black text-red-600 oswald drop-shadow-md" id="rain-amount">0.0</span> 
                     <span class="text-xl font-bold ml-2 text-outline">มม.</span>
                 </div>
-                <p class="text-xs font-bold mt-1 text-outline">ของพื้นที่กรุงเทพมหานคร</p>
+                <p class="text-[10px] font-bold mt-1 text-outline">ของพื้นที่กรุงเทพมหานคร</p>
             </div>
         </div>
 
@@ -105,7 +133,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-3 gap-x-4 gap-y-3 flex-grow">
+        <div class="grid grid-cols-3 gap-x-4 gap-y-3 flex-grow pb-4">
             
             <div class="flex flex-col items-center">
                 <p class="text-[11px] font-bold mb-2 text-outline text-center leading-tight whitespace-nowrap">จุดน้ำค้าง</p>
@@ -177,16 +205,16 @@
         }
 
         const bkkDistricts = [
-            {lat: 13.76, lon: 100.49}, {lat: 13.75, lon: 100.51}, {lat: 13.74, lon: 100.52}, {lat: 13.73, lon: 100.52}, {lat: 13.71, lon: 100.52},
-            {lat: 13.69, lon: 100.54}, {lat: 13.71, lon: 100.58}, {lat: 13.74, lon: 100.58}, {lat: 13.76, lon: 100.53}, {lat: 13.78, lon: 100.54},
-            {lat: 13.78, lon: 100.52}, {lat: 13.82, lon: 100.52}, {lat: 13.82, lon: 100.56}, {lat: 13.78, lon: 100.58}, {lat: 13.76, lon: 100.56},
-            {lat: 13.76, lon: 100.64}, {lat: 13.78, lon: 100.66}, {lat: 13.80, lon: 100.60}, {lat: 13.78, lon: 100.60}, {lat: 13.73, lon: 100.63},
-            {lat: 13.71, lon: 100.67}, {lat: 13.70, lon: 100.60}, {lat: 13.67, lon: 100.61}, {lat: 13.78, lon: 100.34}, {lat: 13.70, lon: 100.35},
-            {lat: 13.71, lon: 100.39}, {lat: 13.72, lon: 100.43}, {lat: 13.77, lon: 100.43}, {lat: 13.79, lon: 100.49}, {lat: 13.76, lon: 100.47},
-            {lat: 13.72, lon: 100.48}, {lat: 13.73, lon: 100.50}, {lat: 13.72, lon: 100.49}, {lat: 13.69, lon: 100.46}, {lat: 13.68, lon: 100.50},
-            {lat: 13.63, lon: 100.49}, {lat: 13.61, lon: 100.43}, {lat: 13.65, lon: 100.39}, {lat: 13.91, lon: 100.64}, {lat: 13.91, lon: 100.59},
-            {lat: 13.88, lon: 100.57}, {lat: 13.86, lon: 100.60}, {lat: 13.87, lon: 100.72}, {lat: 13.81, lon: 100.74}, {lat: 13.85, lon: 100.86},
-            {lat: 13.72, lon: 100.78}, {lat: 13.76, lon: 100.68}, {lat: 13.81, lon: 100.67}, {lat: 13.73, lon: 100.50}, {lat: 13.69, lon: 100.50}
+            {name: "พระนคร", lat: 13.76, lon: 100.49}, {name: "ป้อมปราบฯ", lat: 13.75, lon: 100.51}, {name: "ปทุมวัน", lat: 13.74, lon: 100.52}, {name: "บางรัก", lat: 13.73, lon: 100.52}, {name: "สาทร", lat: 13.71, lon: 100.52},
+            {name: "ยานนาวา", lat: 13.69, lon: 100.54}, {name: "คลองเตย", lat: 13.71, lon: 100.58}, {name: "วัฒนา", lat: 13.74, lon: 100.58}, {name: "ราชเทวี", lat: 13.76, lon: 100.53}, {name: "พญาไท", lat: 13.78, lon: 100.54},
+            {name: "ดุสิต", lat: 13.78, lon: 100.52}, {name: "บางซื่อ", lat: 13.82, lon: 100.52}, {name: "จตุจักร", lat: 13.82, lon: 100.56}, {name: "ห้วยขวาง", lat: 13.78, lon: 100.58}, {name: "ดินแดง", lat: 13.76, lon: 100.56},
+            {name: "บางกะปิ", lat: 13.76, lon: 100.64}, {name: "บึงกุ่ม", lat: 13.78, lon: 100.66}, {name: "ลาดพร้าว", lat: 13.80, lon: 100.60}, {name: "วังทองหลาง", lat: 13.78, lon: 100.60}, {name: "สวนหลวง", lat: 13.73, lon: 100.63},
+            {name: "ประเวศ", lat: 13.71, lon: 100.67}, {name: "พระโขนง", lat: 13.70, lon: 100.60}, {name: "บางนา", lat: 13.67, lon: 100.61}, {name: "ทวีวัฒนา", lat: 13.78, lon: 100.34}, {name: "หนองแขม", lat: 13.70, lon: 100.35},
+            {name: "บางแค", lat: 13.71, lon: 100.39}, {name: "ภาษีเจริญ", lat: 13.72, lon: 100.43}, {name: "ตลิ่งชัน", lat: 13.77, lon: 100.43}, {name: "บางพลัด", lat: 13.79, lon: 100.49}, {name: "บางกอกน้อย", lat: 13.76, lon: 100.47},
+            {name: "บางกอกใหญ่", lat: 13.72, lon: 100.48}, {name: "คลองสาน", lat: 13.73, lon: 100.50}, {name: "ธนบุรี", lat: 13.72, lon: 100.49}, {name: "จอมทอง", lat: 13.69, lon: 100.46}, {name: "ราษฎร์บูรณะ", lat: 13.68, lon: 100.50},
+            {name: "ทุ่งครุ", lat: 13.63, lon: 100.49}, {name: "บางขุนเทียน", lat: 13.61, lon: 100.43}, {name: "บางบอน", lat: 13.65, lon: 100.39}, {name: "สายไหม", lat: 13.91, lon: 100.64}, {name: "ดอนเมือง", lat: 13.91, lon: 100.59},
+            {name: "หลักสี่", lat: 13.88, lon: 100.57}, {name: "บางเขน", lat: 13.86, lon: 100.60}, {name: "คลองสามวา", lat: 13.87, lon: 100.72}, {name: "มีนบุรี", lat: 13.81, lon: 100.74}, {name: "หนองจอก", lat: 13.85, lon: 100.86},
+            {name: "ลาดกระบัง", lat: 13.72, lon: 100.78}, {name: "สะพานสูง", lat: 13.76, lon: 100.68}, {name: "คันนายาว", lat: 13.81, lon: 100.67}, {name: "สัมพันธวงศ์", lat: 13.73, lon: 100.50}, {name: "บางคอแหลม", lat: 13.69, lon: 100.50}
         ];
 
         async function fetchAllData() {
@@ -213,14 +241,25 @@
         function processAppView(apiData, aqData) {
             let rainingDistricts = 0;
             let maxRain = 0;
+            let maxRainDistIndex = -1;
+            let sumTemp = 0;
             
-            apiData.forEach(site => {
+            apiData.forEach((site, index) => {
                 let rain = site.current.precipitation;
+                let temp = site.current.temperature_2m;
+                
+                sumTemp += temp;
+                
                 if(rain > 0) rainingDistricts++;
-                if(rain > maxRain) maxRain = rain;
+                if(rain > maxRain) {
+                    maxRain = rain;
+                    maxRainDistIndex = index;
+                }
             });
             
             let rainPercent = Math.round((rainingDistricts / 50) * 100);
+            let avgTemp = (sumTemp / 50).toFixed(1);
+
             let centerCur = apiData[0].current;
             let aq = aqData.current;
 
@@ -229,6 +268,10 @@
             document.getElementById('rain-amount').innerText = maxRain.toFixed(1); 
             document.getElementById('wind-speed').innerText = centerCur.wind_speed_10m.toFixed(0);
             document.getElementById('wind-dir').innerText = getWindDir(centerCur.wind_direction_10m);
+            
+            // New Added Boxes
+            document.getElementById('avg-temp').innerText = avgTemp;
+            document.getElementById('max-rain-dist').innerText = maxRain > 0 ? "เขต" + bkkDistricts[maxRainDistIndex].name : "ไม่มีฝนตก (Clear)";
             
             // Grid Data
             document.getElementById('p-dew').innerText = centerCur.dew_point_2m.toFixed(1);
