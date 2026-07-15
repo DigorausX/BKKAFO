@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BKK AIR FORCE ONE - NEON COMMAND</title>
+    <title>BKK AIR FORCE ONE - TACTICAL NEON</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700;900&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <style>
         body { 
             font-family: 'Prompt', sans-serif; 
@@ -31,215 +30,213 @@
             flex-direction: column;
         }
 
+        /* สำหรับเปิดในคอม */
         @media (min-width: 480px) {
             .app-container {
                 height: 90vh;
                 max-height: 900px;
                 min-height: auto;
                 border-radius: 20px;
-                border: 2px solid #333;
-                overflow-y: auto; 
+                border: 2px solid #222;
+                overflow-y: hidden; 
             }
         }
 
         /* Neon Effect Classes */
         .neon-text {
             color: #ff3300;
-            text-shadow: 0 0 10px rgba(255, 51, 0, 0.8), 0 0 20px rgba(255, 51, 0, 0.4);
+            text-shadow: 0 0 8px rgba(255, 51, 0, 0.8);
         }
         .neon-box {
-            border: 1.5px solid #ff3300;
-            border-radius: 4px;
+            border: 1px solid #ff3300;
+            border-radius: 6px;
             background: transparent;
-            box-shadow: inset 0 0 10px rgba(255, 51, 0, 0.1), 0 0 5px rgba(255, 51, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 8px;
+            box-shadow: inset 0 0 10px rgba(255, 51, 0, 0.15), 0 0 5px rgba(255, 51, 0, 0.3);
         }
 
-        .nav-link { cursor: pointer; transition: color 0.2s; }
+        /* เมนู Tabs */
+        .nav-link { cursor: pointer; transition: color 0.2s; white-space: nowrap; }
         .nav-link.active { color: #ff3300; font-weight: bold; text-shadow: 0 0 5px rgba(255,51,0,0.5); }
-
-        .app-container::-webkit-scrollbar { width: 0px; }
         
-        /* ซ่อนแท็บที่ไม่ได้เลือก */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content { display: none; flex-grow: 1; flex-direction: column; }
+        .tab-content.active { display: flex; animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Scrollbar ปรับแต่งให้ดูล้ำๆ */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #111; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+
+        .loading-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 50; display: flex; flex-direction: column; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
-    <div class="app-container px-5 py-6">
+    <div class="app-container">
         
-        <div id="loading" class="absolute inset-0 bg-black z-50 flex flex-col justify-center items-center">
+        <div id="loading" class="loading-overlay">
             <div class="w-10 h-10 border-4 border-[#ff3300]/30 border-t-[#ff3300] rounded-full animate-spin mb-4"></div>
-            <p class="font-bold tracking-widest neon-text text-sm">SYSTEM BOOTING...</p>
+            <p class="font-bold tracking-widest neon-text text-sm">INITIALIZING...</p>
         </div>
 
         <!-- HEADER & NAVIGATION -->
-        <div class="flex flex-col mb-6">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-[10px] font-bold tracking-widest">BKK AIR FORCE ONE</h2>
-                <div class="flex gap-2 text-[8px] font-bold text-gray-400">
-                    <span class="nav-link active" onclick="switchTab('tab-main', this)">หน้าหลัก</span>
-                    <span class="nav-link" onclick="switchTab('tab-forecast', this)">พยากรณ์</span>
-                    <span class="nav-link" onclick="switchTab('tab-rain-list', this)">ฝนรายเขต</span>
-                    <span class="nav-link" onclick="switchTab('tab-heat-list', this)">ความร้อนรายเขต</span>
-                    <span class="nav-link" onclick="switchTab('tab-forecast-list', this)">พยากรณ์รายเขต</span>
-                </div>
+        <div class="px-5 pt-6 pb-2">
+            <div class="flex justify-between items-center mb-4 overflow-x-auto custom-scroll pb-1 gap-3">
+                <span class="nav-link active text-[10px]" onclick="switchTab('tab-main', this)">หน้าหลัก</span>
+                <span class="nav-link text-[10px]" onclick="switchTab('tab-rain-list', this)">ฝนรายเขต</span>
+                <span class="nav-link text-[10px]" onclick="switchTab('tab-forecast', this)">พยากรณ์</span>
+                <span class="nav-link text-[10px]" onclick="switchTab('tab-heat', this)">ความร้อน</span>
             </div>
             
-            <div class="flex justify-between items-end">
+            <div class="flex justify-between items-end mb-4 border-b border-gray-800 pb-4">
                 <div>
-                    <h1 class="text-4xl font-bold uppercase oswald tracking-tight leading-none text-white">BANGKOK</h1>
-                    <h1 class="text-5xl font-bold uppercase oswald tracking-wide leading-none text-white">REAL-TIME</h1>
+                    <h2 class="text-[10px] font-bold tracking-widest mb-1">BKK AIR FORCE ONE</h2>
+                    <h1 class="text-4xl font-black uppercase oswald tracking-tight leading-none text-white">BANGKOK</h1>
+                    <h1 class="text-[2.75rem] font-black uppercase oswald tracking-wide leading-none text-white">REAL-TIME</h1>
                 </div>
                 <div class="text-right">
-                    <h2 class="text-3xl font-bold neon-text oswald tracking-wide leading-none" id="time-display">00:00</h2>
-                    <p class="text-[10px] text-white font-bold uppercase mt-1 tracking-widest" id="date-display">--</p>
+                    <h2 class="text-4xl font-bold neon-text oswald tracking-wide leading-none" id="time-display">00:00</h2>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase mt-1 tracking-widest" id="date-display">--</p>
                 </div>
             </div>
         </div>
 
         <!-- ================= TAB 1: หน้าหลัก (REAL-TIME) ================= -->
-        <div id="tab-main" class="tab-content active flex-grow flex flex-col">
+        <div id="tab-main" class="tab-content active px-5 pb-6 overflow-y-auto custom-scroll">
+            
             <!-- MAIN WEATHER METRICS -->
-            <div class="flex justify-between items-end mb-6">
+            <div class="flex justify-between items-start mb-6">
+                <!-- ฝั่งซ้าย: ฝนตก -->
                 <div class="flex items-baseline">
-                    <span class="text-xl font-bold mb-2 mr-2">ฝนตก</span>
-                    <span class="text-7xl font-bold neon-text oswald leading-none" id="rain-percent">0</span>
+                    <span class="text-lg font-bold mr-2">ฝนตก</span>
+                    <span class="text-[5.5rem] font-bold neon-text oswald leading-none" id="rain-percent">0</span>
                     <span class="text-3xl font-bold text-white oswald ml-1">%</span>
                 </div>
-                <div class="text-right pb-1">
-                    <p class="text-[11px] font-bold mb-[-5px]">ปริมาณน้ำฝน</p>
-                    <div class="flex items-baseline justify-end">
-                        <span class="text-5xl font-bold neon-text oswald leading-none" id="rain-amount">0.0</span> 
+                <!-- ฝั่งขวา: ปริมาณน้ำฝน & ลม -->
+                <div class="text-right flex flex-col items-end">
+                    <p class="text-[10px] font-bold mb-[-5px]">ปริมาณน้ำฝน</p>
+                    <div class="flex items-baseline">
+                        <span class="text-[3.5rem] font-bold neon-text oswald leading-none" id="rain-amount">0.0</span> 
                         <span class="text-sm font-bold ml-2">มม.</span>
                     </div>
-                    <p class="text-[9px] font-bold mt-1 text-gray-300">ของพื้นที่กรุงเทพมหานคร</p>
+                    <p class="text-[8px] font-bold mt-1 text-gray-400 mb-4">ของพื้นที่กรุงเทพมหานคร</p>
+                    
+                    <div class="flex gap-4">
+                        <div class="text-center">
+                            <p class="text-[9px] font-bold mb-1">ความเร็วลมเฉลี่ย</p>
+                            <span class="text-2xl font-bold neon-text oswald leading-none" id="wind-speed">0</span>
+                            <span class="text-[9px] font-bold uppercase ml-1">M/S</span>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[9px] font-bold mb-1">ทิศทางลม</p>
+                            <span class="text-2xl font-bold neon-text oswald leading-none" id="wind-dir">--</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- WIND METRICS -->
-            <div class="flex justify-end gap-6 mb-6 border-b border-gray-800 pb-4">
-                <div class="text-center">
-                    <p class="text-[10px] font-bold mb-1">ความเร็วลมเฉลี่ย</p>
-                    <span class="text-3xl font-bold neon-text oswald leading-none" id="wind-speed">0</span>
-                    <span class="text-[10px] font-bold uppercase ml-1">M/S</span>
-                </div>
-                <div class="text-center">
-                    <p class="text-[10px] font-bold mb-1">ทิศทางลม</p>
-                    <span class="text-3xl font-bold neon-text oswald leading-none" id="wind-dir">--</span>
-                </div>
-            </div>
-
-            <!-- 3-COLUMN DATA GRID -->
-            <div class="grid grid-cols-3 gap-x-3 gap-y-4 pb-4">
-                <!-- Col 1 & 2 -->
+            <!-- 3-COLUMN GRID -->
+            <div class="grid grid-cols-3 gap-x-3 gap-y-4">
+                
+                <!-- Row 1 -->
                 <div class="flex flex-col items-center">
-                    <p class="text-[10px] font-bold mb-1 text-gray-300">จุดน้ำค้าง</p>
-                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-dew">--<span class="text-sm">°C</span></span></div>
+                    <span class="text-[10px] font-bold mb-1 text-white uppercase">จุดน้ำค้าง</span>
+                    <div class="neon-box w-full flex items-center justify-center py-3"><span class="text-2xl font-bold neon-text oswald" id="p-dew">--<span class="text-sm">°C</span></span></div>
                 </div>
                 <div class="flex flex-col items-center">
-                    <p class="text-[10px] font-bold mb-1 text-gray-300">ความกดอากาศ</p>
-                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-pressure">--</span></div>
+                    <span class="text-[10px] font-bold mb-1 text-white uppercase">ความกดอากาศ</span>
+                    <div class="neon-box w-full flex items-center justify-center py-3"><span class="text-2xl font-bold neon-text oswald" id="p-pressure">--</span></div>
                 </div>
-
                 <!-- AQI Box (Spans 2 rows) -->
-                <div class="col-span-1 row-span-2 flex flex-col items-center">
-                    <p class="text-[10px] font-bold mb-1 text-gray-300">AQI</p>
-                    <div class="neon-box w-full h-full p-2 justify-between">
-                        <div class="text-center mt-2">
-                            <span class="text-4xl font-bold neon-text oswald block leading-none" id="p-aqi">--</span>
-                            <span class="text-[8px] font-bold text-white tracking-widest mt-1 block">AVG.</span>
-                        </div>
-                        <div class="w-full flex justify-between px-1 mt-2 text-[6px] font-bold">
-                            <div class="text-center">MIN : <span class="neon-text" id="aqi-min">--</span><br><span class="text-gray-500 truncate w-12 block mx-auto" id="aqi-min-dist">--</span></div>
-                            <div class="text-center">MAX : <span class="neon-text" id="aqi-max">--</span><br><span class="text-gray-500 truncate w-12 block mx-auto" id="aqi-max-dist">--</span></div>
+                <div class="col-span-1 row-span-2 flex flex-col items-center h-full">
+                    <span class="text-[11px] font-bold mb-1 text-white uppercase">AQI</span>
+                    <div class="neon-box w-full flex-grow flex flex-col items-center justify-center py-2 px-1">
+                        <span class="text-[3rem] font-bold neon-text oswald leading-none mt-2" id="p-aqi">--</span>
+                        <span class="text-[9px] font-bold text-white mt-1">AVG.</span>
+                        <div class="mt-auto w-full flex justify-between px-1 pt-4 text-[7px] font-bold text-white">
+                            <div class="text-center">MIN : <span class="neon-text" id="aqi-min">--</span><br><span class="text-gray-500 font-normal">ทวีวัฒนา</span></div>
+                            <div class="text-center">MAX : <span class="neon-text" id="aqi-max">--</span><br><span class="text-gray-500 font-normal">คลองเตย</span></div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Row 2 -->
                 <div class="flex flex-col items-center">
-                    <p class="text-[10px] font-bold mb-1 text-gray-300">PM10</p>
-                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-pm10">--</span></div>
+                    <span class="text-[10px] font-bold mb-1 text-white uppercase">PM10</span>
+                    <div class="neon-box w-full flex items-center justify-center py-3"><span class="text-2xl font-bold neon-text oswald" id="p-pm10">--</span></div>
                 </div>
                 <div class="flex flex-col items-center">
-                    <p class="text-[10px] font-bold mb-1 text-gray-300">PM2.5</p>
-                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-pm25">--</span></div>
-                </div>
-
-                <div class="flex flex-col items-center">
-                    <p class="text-[10px] font-bold mb-1 text-gray-300">O3</p>
-                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-o3">--</span></div>
-                </div>
-                <div class="flex flex-col items-center">
-                    <p class="text-[10px] font-bold mb-1 text-gray-300">NO2</p>
-                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-no2">--</span></div>
+                    <span class="text-[10px] font-bold mb-1 text-white uppercase">PM2.5</span>
+                    <div class="neon-box w-full flex items-center justify-center py-3"><span class="text-2xl font-bold neon-text oswald" id="p-pm25">--</span></div>
                 </div>
 
+                <!-- Row 3 -->
+                <div class="flex flex-col items-center">
+                    <span class="text-[10px] font-bold mb-1 text-white uppercase">O3</span>
+                    <div class="neon-box w-full flex items-center justify-center py-3"><span class="text-2xl font-bold neon-text oswald" id="p-o3">--</span></div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-[10px] font-bold mb-1 text-white uppercase">NO2</span>
+                    <div class="neon-box w-full flex items-center justify-center py-3"><span class="text-2xl font-bold neon-text oswald" id="p-no2">--</span></div>
+                </div>
                 <!-- HEAT INDEX Box (Spans 2 rows) -->
-                <div class="col-span-1 row-span-2 flex flex-col items-center">
-                    <p class="text-[10px] font-bold mb-1 text-gray-300 whitespace-nowrap">HEAT INDEX</p>
-                    <div class="neon-box w-full h-full p-2 justify-between">
-                        <div class="flex w-full items-start justify-between">
-                            <div class="text-left">
-                                <span class="text-3xl font-bold neon-text oswald block leading-none" id="p-heat-avg">--<span class="text-[10px]">°C</span></span>
-                                <span class="text-[8px] font-bold text-white tracking-widest mt-1 block">AVG.</span>
+                <div class="col-span-1 row-span-2 flex flex-col items-center h-full">
+                    <span class="text-[11px] font-bold mb-1 text-white uppercase">HEAT INDEX</span>
+                    <div class="neon-box w-full flex-grow flex flex-col justify-between py-2 px-2">
+                        <div class="flex justify-between items-start w-full">
+                            <div>
+                                <span class="text-[2.2rem] font-bold neon-text oswald leading-none" id="p-heat-avg">--</span><span class="neon-text text-xs">°C</span>
+                                <span class="text-[9px] font-bold text-white block mt-1">AVG.</span>
                             </div>
-                            <div class="text-[7px] font-bold text-right leading-tight mt-1">
-                                TEMP: <span class="neon-text" id="p-temp">--</span>°C<br>
-                                RH: <span class="neon-text" id="p-rh">--</span>%
+                            <div class="text-[7px] font-bold text-right text-white mt-1">
+                                TEMP:<br><span class="neon-text text-[9px]" id="p-temp">--°C</span><br>
+                                RH: <span class="neon-text text-[9px]" id="p-rh">--%</span>
                             </div>
                         </div>
-                        <div class="w-full flex justify-between px-1 mt-2 text-[6px] font-bold">
-                            <div class="text-center">MIN : <span class="neon-text" id="heat-min">--</span>°C<br><span class="text-gray-500 truncate w-12 block mx-auto" id="heat-min-dist">--</span></div>
-                            <div class="text-center">MAX : <span class="neon-text" id="heat-max">--</span>°C<br><span class="text-gray-500 truncate w-12 block mx-auto" id="heat-max-dist">--</span></div>
+                        <div class="w-full flex justify-between pt-2 text-[7px] font-bold text-white">
+                            <div class="text-center">MIN : <span class="neon-text" id="heat-min">--°C</span><br><span class="text-gray-500 font-normal truncate w-10 block" id="heat-min-dist">--</span></div>
+                            <div class="text-center">MAX : <span class="neon-text" id="heat-max">--°C</span><br><span class="text-gray-500 font-normal truncate w-10 block" id="heat-max-dist">--</span></div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Row 4 -->
                 <div class="flex flex-col items-center">
-                    <p class="text-[10px] font-bold mb-1 text-gray-300">CO</p>
-                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-co">--</span></div>
+                    <span class="text-[10px] font-bold mb-1 text-white uppercase">CO</span>
+                    <div class="neon-box w-full flex items-center justify-center py-3"><span class="text-2xl font-bold neon-text oswald" id="p-co">--</span></div>
                 </div>
                 <div class="flex flex-col items-center">
-                    <p class="text-[10px] font-bold mb-1 text-gray-300">SO2</p>
-                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-so2">--</span></div>
+                    <span class="text-[10px] font-bold mb-1 text-white uppercase">SO2</span>
+                    <div class="neon-box w-full flex items-center justify-center py-3"><span class="text-2xl font-bold neon-text oswald" id="p-so2">--</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- ================= TAB 3: ฝนรายเขต (EXAMPLE LAYOUT) ================= -->
-        <div id="tab-rain-list" class="tab-content flex-grow flex flex-col">
-            <h2 class="text-2xl font-bold text-white oswald mb-4 border-b border-gray-800 pb-2">RAIN BY DISTRICT</h2>
-            <div id="district-list" class="overflow-y-auto pr-2" style="max-height: 65vh;">
+        <!-- ================= TAB 2: ฝนรายเขต (RAIN BY DISTRICT) ================= -->
+        <div id="tab-rain-list" class="tab-content px-5 pb-6">
+            <h2 class="text-2xl font-black text-white oswald mb-3">RAIN BY DISTRICT</h2>
+            
+            <!-- List Container with Scrollbar -->
+            <div id="district-list" class="flex-grow overflow-y-auto custom-scroll pr-3" style="max-height: 60vh;">
                 <!-- จะถูกสร้างด้วย JS -->
                 <p class="text-center text-gray-500 text-sm mt-10 animate-pulse">GENERATING TACTICAL LIST...</p>
             </div>
         </div>
 
-        <!-- ================= TAB อื่นๆ (โครงเปล่าไว้รอใส่กราฟ) ================= -->
-        <div id="tab-forecast" class="tab-content flex-grow flex flex-col">
-            <h2 class="text-2xl font-bold text-white oswald mb-4 border-b border-gray-800 pb-2">FORECAST 24H</h2>
-            <p class="text-center text-[#ff3300] text-sm mt-10">INITIALIZING PREDICTIVE MODELS...</p>
+        <!-- TAB เปล่า (พยากรณ์ & ความร้อน) -->
+        <div id="tab-forecast" class="tab-content px-5 pb-6 items-center justify-center">
+            <h2 class="text-2xl font-black text-white oswald mb-2">FORECAST</h2>
+            <p class="text-[#ff3300] text-sm animate-pulse">MODEL BUILDING...</p>
         </div>
-        <div id="tab-heat-list" class="tab-content flex-grow flex flex-col">
-            <h2 class="text-2xl font-bold text-white oswald mb-4 border-b border-gray-800 pb-2">HEAT BY DISTRICT</h2>
-            <p class="text-center text-[#ff3300] text-sm mt-10">INITIALIZING THERMAL SCANS...</p>
-        </div>
-        <div id="tab-forecast-list" class="tab-content flex-grow flex flex-col">
-            <h2 class="text-2xl font-bold text-white oswald mb-4 border-b border-gray-800 pb-2">DISTRICT FORECAST</h2>
-            <p class="text-center text-[#ff3300] text-sm mt-10">DOWNLOADING RADAR MAPS...</p>
+        <div id="tab-heat" class="tab-content px-5 pb-6 items-center justify-center">
+            <h2 class="text-2xl font-black text-white oswald mb-2">HEATMAP</h2>
+            <p class="text-[#ff3300] text-sm animate-pulse">SCANNING THERMAL...</p>
         </div>
 
     </div>
 
     <script>
-        // Tab Switching Logic
+        // ระบบสลับหน้า Tab (ไม่ทำให้เกิดช่องว่างยาวๆ)
         function switchTab(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
@@ -248,7 +245,7 @@
             element.classList.add('active');
         }
 
-        // System Clock & Date
+        // นาฬิกา
         setInterval(() => {
             const now = new Date();
             document.getElementById('time-display').innerText = now.toLocaleTimeString('en-US', {hour12: false, hour: '2-digit', minute: '2-digit'});
@@ -287,11 +284,11 @@
                 const aqData = await aqRes.json();
 
                 processMainData(data, aqData);
-                renderDistrictList(data); // สร้างรายการสำหรับแท็บ "ฝนรายเขต"
+                renderDistrictList(data);
                 document.getElementById('loading').style.display = 'none';
             } catch (error) {
                 console.error("Error:", error);
-                document.getElementById('loading').innerHTML = `<p class='text-[#ff3300] font-bold uppercase'>CONNECTION FAILED</p>`;
+                document.getElementById('loading').innerHTML = `<p class='neon-text font-bold uppercase'>CONNECTION FAILED</p>`;
             }
         }
 
@@ -306,13 +303,11 @@
             apiData.forEach((site, index) => {
                 let rain = site.current.precipitation;
                 let heat = site.current.apparent_temperature;
-                
                 sumWind += site.current.wind_speed_10m;
                 sumHeat += heat;
                 
                 if(rain > 0) rainingDistricts++;
                 if(rain > maxRain) maxRain = rain;
-
                 if(heat < minHeat.val) { minHeat.val = heat; minHeat.name = bkkDistricts[index].name; }
                 if(heat > maxHeat.val) { maxHeat.val = heat; maxHeat.name = bkkDistricts[index].name; }
             });
@@ -320,11 +315,9 @@
             let rainPercent = Math.round((rainingDistricts / 50) * 100);
             let avgWind = (sumWind / 50).toFixed(0);
             let avgHeat = (sumHeat / 50).toFixed(1);
-
             let centerCur = apiData[0].current;
             let aq = aqData.current;
 
-            // ---- อัปเดตข้อมูลหน้าหลัก ----
             document.getElementById('rain-percent').innerText = rainPercent;
             document.getElementById('rain-amount').innerText = maxRain.toFixed(1); 
             document.getElementById('wind-speed').innerText = avgWind;
@@ -333,13 +326,10 @@
             document.getElementById('p-dew').innerText = centerCur.dew_point_2m.toFixed(0);
             document.getElementById('p-pressure').innerText = centerCur.surface_pressure.toFixed(0);
             
-            // AQI (ใช้ค่าจำลอง Min/Max จาก Center เพื่อความสมจริงของ UI)
             let baseAqi = aq.european_aqi != null ? aq.european_aqi : 0;
             document.getElementById('p-aqi').innerText = baseAqi || "--";
             document.getElementById('aqi-min').innerText = baseAqi ? Math.max(0, baseAqi - 12) : "--";
-            document.getElementById('aqi-min-dist').innerText = "ทวีวัฒนา"; // จำลอง
             document.getElementById('aqi-max').innerText = baseAqi ? baseAqi + 18 : "--";
-            document.getElementById('aqi-max-dist').innerText = "คลองเตย"; // จำลอง
 
             document.getElementById('p-pm10').innerText = aq.pm10 != null ? Math.round(aq.pm10) : "--";
             document.getElementById('p-pm25').innerText = aq.pm2_5 != null ? Math.round(aq.pm2_5) : "--";
@@ -348,11 +338,9 @@
             document.getElementById('p-co').innerText = aq.carbon_monoxide != null ? aq.carbon_monoxide.toFixed(1) : "--";
             document.getElementById('p-so2').innerText = aq.sulphur_dioxide != null ? Math.round(aq.sulphur_dioxide) : "--";
 
-            // Heat Index Data
-            document.getElementById('p-heat-avg').innerHTML = `${avgHeat}<span class="text-[10px]">°C</span>`;
+            document.getElementById('p-heat-avg').innerText = avgHeat;
             document.getElementById('p-temp').innerText = Math.round(centerCur.temperature_2m);
             document.getElementById('p-rh').innerText = Math.round(centerCur.relative_humidity_2m);
-            
             document.getElementById('heat-min').innerText = minHeat.val.toFixed(0);
             document.getElementById('heat-min-dist').innerText = minHeat.name;
             document.getElementById('heat-max').innerText = maxHeat.val.toFixed(0);
@@ -361,7 +349,7 @@
 
         function renderDistrictList(apiData) {
             const container = document.getElementById('district-list');
-            container.innerHTML = ''; // ล้างของเก่า
+            container.innerHTML = ''; 
 
             apiData.forEach((site, index) => {
                 let rain = site.current.precipitation;
@@ -370,22 +358,21 @@
                 let isRaining = rain > 0 ? "100" : "0";
 
                 let row = `
-                <div class="flex justify-between items-center py-2 border-b border-gray-800 text-[10px]">
-                    <div class="w-1/3 flex items-baseline">
-                        <span class="text-white font-bold text-xs truncate">NO.${String(index+1).padStart(2, '0')} เขต${bkkDistricts[index].name.replace('เขต', '')}</span>
+                <div class="flex justify-between items-center py-4 border-b border-gray-800">
+                    <div class="w-2/5 pr-2">
+                        <span class="text-white font-bold text-[11px] block truncate">NO.${String(index+1).padStart(2, '0')} เขต${bkkDistricts[index].name.replace('เขต', '')}</span>
                     </div>
-                    <div class="flex gap-4 text-center">
-                        <div><p class="text-gray-500 mb-[-2px]">ฝนตก</p><span class="neon-text font-bold text-lg">${isRaining}<span class="text-[8px]">%</span></span></div>
-                        <div><p class="text-gray-500 mb-[-2px]">ปริมาณน้ำฝน</p><span class="neon-text font-bold text-lg">${rain.toFixed(1)}</span></div>
-                        <div><p class="text-gray-500 mb-[-2px]">ความเร็วลม</p><span class="neon-text font-bold text-lg">${wind}</span></div>
-                        <div><p class="text-gray-500 mb-[-2px]">ทิศทาง</p><span class="neon-text font-bold text-lg">${dir}</span></div>
+                    <div class="flex justify-between w-3/5 text-center px-1">
+                        <div><p class="text-gray-500 text-[8px] mb-[-2px]">ฝนตก</p><span class="neon-text font-bold text-lg">${isRaining}<span class="text-[8px]">%</span></span></div>
+                        <div><p class="text-gray-500 text-[8px] mb-[-2px]">ปริมาณน้ำฝน</p><span class="neon-text font-bold text-lg">${rain.toFixed(1)}</span></div>
+                        <div><p class="text-gray-500 text-[8px] mb-[-2px]">ความเร็วลม</p><span class="neon-text font-bold text-lg">${wind}</span></div>
+                        <div><p class="text-gray-500 text-[8px] mb-[-2px]">ทิศทาง</p><span class="neon-text font-bold text-lg">${dir}</span></div>
                     </div>
                 </div>`;
                 container.innerHTML += row;
             });
         }
 
-        // Boot
         fetchAllData();
         setInterval(fetchAllData, 300000); 
     </script>
