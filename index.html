@@ -74,8 +74,13 @@
     <div class="app-container flex flex-col justify-start">
         
         <div id="loading" class="loading-overlay">
-            <div class="w-10 h-10 border-4 border-[#ff3300]/30 border-t-[#ff3300] rounded-full animate-spin mb-4"></div>
-            <p class="font-bold tracking-widest neon-text text-xs">SYNCHRONIZING RADAR...</p>
+            <div class="w-10 h-10 border-4 border-[#ff3300]/30 border-t-[#ff3300] rounded-full animate-spin mb-4" id="loading-spinner"></div>
+            <p class="font-bold tracking-widest neon-text text-xs" id="loading-text">SYNCHRONIZING RADAR...</p>
+            <div id="error-container" class="hidden mt-4 flex-col items-center border border-[#ff3300] p-4 rounded-lg bg-[#ff3300]/10 max-w-[80%] text-center">
+                <span class="text-3xl mb-2">⚠️</span>
+                <p class='text-white text-[10px] font-mono mb-4 text-left p-2 bg-black rounded w-full overflow-hidden' id="error-message">Error Data</p>
+                <button onclick="location.reload()" class="px-5 py-2 border border-[#ff3300] text-[#ff3300] text-xs font-bold rounded hover:bg-[#ff3300]/20 transition-all">REBOOT SYSTEM</button>
+            </div>
         </div>
 
         <div class="px-5 pt-5 flex flex-col flex-shrink-0">
@@ -130,7 +135,6 @@
             </div>
 
             <div class="grid grid-cols-3 gap-x-3 gap-y-3">
-                
                 <div class="flex flex-col items-center">
                     <span class="text-[9px] font-bold mb-0.5 text-gray-400 uppercase tracking-wider">จุดน้ำค้าง</span>
                     <div class="neon-box w-full py-2.5 text-center"><span class="text-xl font-bold neon-text oswald" id="p-dew">--<span class="text-xs">°C</span></span></div>
@@ -265,6 +269,16 @@
 
         let chartRain, chartHeat;
 
+        // ระบบจับ Error แบบละเอียด
+        function showApiError(msg) {
+            document.getElementById('loading-text').innerText = "SYSTEM FAILURE";
+            document.getElementById('loading-spinner').classList.add('hidden');
+            const errBox = document.getElementById('error-container');
+            errBox.classList.remove('hidden');
+            errBox.classList.add('flex');
+            document.getElementById('error-message').innerText = msg;
+        }
+
         async function fetchAllData() {
             try {
                 const lats = bkkDistricts.map(d => d.lat).join(',');
@@ -272,10 +286,23 @@
                 
                 const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=precipitation,wind_speed_10m,wind_direction_10m,surface_pressure,temperature_2m,relative_humidity_2m,apparent_temperature,dew_point_2m&hourly=precipitation_probability,apparent_temperature&forecast_hours=24&timezone=Asia/Bangkok`;
                 const res = await fetch(url);
+                
+                // ตรวจสอบสถานะการเชื่อมต่อ (ถ้าโดนแบนเพราะ Rate Limit จะติดตรงนี้)
+                if (!res.ok) {
+                    let errObj = {};
+                    try { errObj = await res.json(); } catch(e) {}
+                    throw new Error(`WEATHER API ERROR: ${errObj.reason || res.statusText}`);
+                }
                 const data = await res.json();
 
                 const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=13.75&longitude=100.50&current=pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone,european_aqi&timezone=Asia/Bangkok`;
                 const aqRes = await fetch(aqUrl);
+                
+                if (!aqRes.ok) {
+                    let errObj = {};
+                    try { errObj = await aqRes.json(); } catch(e) {}
+                    throw new Error(`AQI API ERROR: ${errObj.reason || aqRes.statusText}`);
+                }
                 const aqData = await aqRes.json();
 
                 processMainData(data, aqData);
@@ -285,7 +312,7 @@
                 document.getElementById('loading').style.display = 'none';
             } catch (error) {
                 console.error(error);
-                document.getElementById('loading').innerHTML = `<p class='neon-text font-bold text-xs uppercase'>LINK DISRUPTED</p>`;
+                showApiError(error.message);
             }
         }
 
@@ -338,9 +365,9 @@
             document.getElementById('p-heat-avg').innerText = Math.round(avgHeat);
             document.getElementById('p-temp').innerText = Math.round(centerCur.temperature_2m);
             document.getElementById('p-rh').innerText = Math.round(centerCur.relative_humidity_2m);
-            document.getElementById('heat-min').innerText = minHeat.val.toFixed(0) + "°";
+            document.getElementById('heat-min').innerText = minHeat.val.toFixed(0);
             document.getElementById('heat-min-dist').innerText = minHeat.name.replace('เขต', '');
-            document.getElementById('heat-max').innerText = maxHeat.val.toFixed(0) + "°";
+            document.getElementById('heat-max').innerText = maxHeat.val.toFixed(0);
             document.getElementById('heat-max-dist').innerText = maxHeat.name.replace('เขต', '');
         }
 
@@ -355,7 +382,7 @@
                     wind: site.current.wind_speed_10m,
                     dir: getWindDir(site.current.wind_direction_10m)
                 };
-            }).sort((a, b) => b.rain - a.rain);
+            }).sort((a, b) => b.rain - a.rain || b.wind - a.wind);
 
             sortedArr.forEach((site, index) => {
                 let statusRain = site.rain > 0 ? "100" : "0";
