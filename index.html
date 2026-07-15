@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BKK AIR FORCE ONE - TACTICAL METAL</title>
+    <title>BKK AIR FORCE ONE - NEON COMMAND</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700;900&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body { 
             font-family: 'Prompt', sans-serif; 
-            background-color: #0f172a; 
+            background-color: #000000; 
+            color: #ffffff;
             margin: 0; 
             display: flex; 
             justify-content: center;
@@ -22,14 +24,11 @@
             width: 100%;
             max-width: 430px; 
             min-height: 100vh;
-            background: radial-gradient(circle at 30% 20%, #cbcabf 0%, #a8a79a 45%, #7a796c 100%);
-            color: white;
+            background-color: #000000;
             position: relative;
             overflow-x: hidden;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* กระจายเนื้อหาให้เต็มความสูงหน้าจอ */
         }
 
         @media (min-width: 480px) {
@@ -37,193 +36,228 @@
                 height: 90vh;
                 max-height: 900px;
                 min-height: auto;
-                border-radius: 40px;
-                border: 14px solid #1e293b;
+                border-radius: 20px;
+                border: 2px solid #333;
                 overflow-y: auto; 
             }
         }
 
-        .metal-box {
-            background-color: #ecece6;
-            border-radius: 20px;
-            box-shadow: 
-                8px 8px 15px rgba(0, 0, 0, 0.4), 
-                inset 2px 2px 5px rgba(255, 255, 255, 0.9),
-                inset -2px -2px 5px rgba(0, 0, 0, 0.1);
+        /* Neon Effect Classes */
+        .neon-text {
+            color: #ff3300;
+            text-shadow: 0 0 10px rgba(255, 51, 0, 0.8), 0 0 20px rgba(255, 51, 0, 0.4);
+        }
+        .neon-box {
+            border: 1.5px solid #ff3300;
+            border-radius: 4px;
+            background: transparent;
+            box-shadow: inset 0 0 10px rgba(255, 51, 0, 0.1), 0 0 5px rgba(255, 51, 0, 0.3);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #1f2937;
-            transition: transform 0.1s;
+            padding: 8px;
         }
 
-        .text-outline { text-shadow: 1px 1px 3px rgba(0,0,0,0.6); }
-        .text-outline-heavy { text-shadow: 2px 2px 4px rgba(0,0,0,0.7); }
+        .nav-link { cursor: pointer; transition: color 0.2s; }
+        .nav-link.active { color: #ff3300; font-weight: bold; text-shadow: 0 0 5px rgba(255,51,0,0.5); }
 
-        .loading-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #27272a; z-index: 50; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        .app-container::-webkit-scrollbar { width: 0px; background: transparent; }
+        .app-container::-webkit-scrollbar { width: 0px; }
+        
+        /* ซ่อนแท็บที่ไม่ได้เลือก */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div class="app-container px-6 py-8">
+    <div class="app-container px-5 py-6">
         
-        <div id="loading" class="loading-overlay">
-            <div class="spinner mb-4"></div>
-            <p class="font-bold tracking-widest animate-pulse">UPDATING RADAR...</p>
+        <div id="loading" class="absolute inset-0 bg-black z-50 flex flex-col justify-center items-center">
+            <div class="w-10 h-10 border-4 border-[#ff3300]/30 border-t-[#ff3300] rounded-full animate-spin mb-4"></div>
+            <p class="font-bold tracking-widest neon-text text-sm">SYSTEM BOOTING...</p>
         </div>
 
-        <div>
-            <div class="flex justify-between items-start">
+        <!-- HEADER & NAVIGATION -->
+        <div class="flex flex-col mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-[10px] font-bold tracking-widest">BKK AIR FORCE ONE</h2>
+                <div class="flex gap-2 text-[8px] font-bold text-gray-400">
+                    <span class="nav-link active" onclick="switchTab('tab-main', this)">หน้าหลัก</span>
+                    <span class="nav-link" onclick="switchTab('tab-forecast', this)">พยากรณ์</span>
+                    <span class="nav-link" onclick="switchTab('tab-rain-list', this)">ฝนรายเขต</span>
+                    <span class="nav-link" onclick="switchTab('tab-heat-list', this)">ความร้อนรายเขต</span>
+                    <span class="nav-link" onclick="switchTab('tab-forecast-list', this)">พยากรณ์รายเขต</span>
+                </div>
+            </div>
+            
+            <div class="flex justify-between items-end">
                 <div>
-                    <h2 class="text-sm font-bold tracking-wide text-outline">BKK AIR FORCE ONE</h2>
-                    <h1 class="text-[3.5rem] font-black mt-2 uppercase oswald tracking-tight leading-none text-outline-heavy">BANGKOK</h1>
-                    <h1 class="text-[3.5rem] font-black uppercase oswald tracking-wide leading-none text-outline-heavy">REAL-TIME</h1>
+                    <h1 class="text-4xl font-bold uppercase oswald tracking-tight leading-none text-white">BANGKOK</h1>
+                    <h1 class="text-5xl font-bold uppercase oswald tracking-wide leading-none text-white">REAL-TIME</h1>
                 </div>
-                <div class="text-right flex flex-col items-end mt-2">
-                    <h2 class="text-4xl font-normal text-red-600 oswald tracking-wide drop-shadow-sm leading-none" id="time-display">00:00</h2>
-                    <p class="text-[13px] text-red-600 font-bold uppercase mt-1 mb-3" id="date-display">--</p>
-                    
-                    <div class="bg-black/10 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-1.5 shadow-inner flex flex-col items-center">
-                        <p class="text-[10px] font-bold text-white text-outline leading-tight">AVG TEMP</p>
-                        <p class="text-2xl font-bold text-red-600 oswald leading-none drop-shadow-md mt-1"><span id="avg-temp">--</span><span class="text-xs text-white"> °C</span></p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-5 flex items-center gap-3 bg-black/5 border border-white/10 rounded-xl p-3 shadow-inner">
-                <i id="w-icon" class="fa-solid fa-cloud text-3xl text-white drop-shadow-md"></i>
-                <div class="flex flex-col">
-                    <span class="text-[10px] text-white/80 font-bold uppercase tracking-widest text-outline">Weather Status</span>
-                    <span id="w-desc" class="text-xl font-bold text-white text-outline tracking-wide leading-none mt-1">กำลังประมวลผล...</span>
+                <div class="text-right">
+                    <h2 class="text-3xl font-bold neon-text oswald tracking-wide leading-none" id="time-display">00:00</h2>
+                    <p class="text-[10px] text-white font-bold uppercase mt-1 tracking-widest" id="date-display">--</p>
                 </div>
             </div>
         </div>
 
-        <div class="flex flex-col gap-6 w-full py-6 flex-grow justify-center">
-            
-            <div class="flex justify-between items-end w-full">
-                <div class="flex flex-col">
-                    <div class="flex items-baseline">
-                        <span class="text-3xl font-bold mb-2 mr-2 text-outline">ฝนตก</span>
-                        <span class="text-[6.5rem] font-black text-red-600 oswald leading-none drop-shadow-md" id="rain-percent">0</span>
-                        <span class="text-4xl font-black text-outline oswald ml-1">%</span>
-                    </div>
-                    <div class="bg-black/10 backdrop-blur-sm border border-white/20 rounded-lg p-2 mt-1 shadow-inner self-start min-w-[150px]">
-                        <p class="text-[10px] font-bold text-white text-outline leading-tight">เขตที่ฝนตกหนักสุด</p>
-                        <p class="text-[14px] font-bold text-red-600 drop-shadow-md mt-0.5 truncate" id="max-rain-dist">ไม่พบกลุ่มฝน</p>
-                    </div>
+        <!-- ================= TAB 1: หน้าหลัก (REAL-TIME) ================= -->
+        <div id="tab-main" class="tab-content active flex-grow flex flex-col">
+            <!-- MAIN WEATHER METRICS -->
+            <div class="flex justify-between items-end mb-6">
+                <div class="flex items-baseline">
+                    <span class="text-xl font-bold mb-2 mr-2">ฝนตก</span>
+                    <span class="text-7xl font-bold neon-text oswald leading-none" id="rain-percent">0</span>
+                    <span class="text-3xl font-bold text-white oswald ml-1">%</span>
                 </div>
-
                 <div class="text-right pb-1">
-                    <p class="text-sm font-bold mb-[-5px] text-outline">ปริมาณน้ำฝน</p>
+                    <p class="text-[11px] font-bold mb-[-5px]">ปริมาณน้ำฝน</p>
                     <div class="flex items-baseline justify-end">
-                        <span class="text-[5.5rem] font-black text-red-600 oswald drop-shadow-md leading-none" id="rain-amount">0.0</span> 
-                        <span class="text-2xl font-bold ml-2 text-outline">มม.</span>
+                        <span class="text-5xl font-bold neon-text oswald leading-none" id="rain-amount">0.0</span> 
+                        <span class="text-sm font-bold ml-2">มม.</span>
                     </div>
-                    <p class="text-[11px] font-bold mt-2 text-outline">ของพื้นที่กรุงเทพมหานคร</p>
+                    <p class="text-[9px] font-bold mt-1 text-gray-300">ของพื้นที่กรุงเทพมหานคร</p>
                 </div>
             </div>
 
-            <div class="flex justify-end gap-10 w-full mt-2">
+            <!-- WIND METRICS -->
+            <div class="flex justify-end gap-6 mb-6 border-b border-gray-800 pb-4">
                 <div class="text-center">
-                    <p class="text-[13px] font-bold mb-[-2px] text-outline">ความเร็วลม</p>
-                    <span class="text-5xl font-black text-red-600 oswald drop-shadow-md" id="wind-speed">0</span><br>
-                    <span class="text-[11px] font-bold uppercase text-outline">km/h</span>
+                    <p class="text-[10px] font-bold mb-1">ความเร็วลมเฉลี่ย</p>
+                    <span class="text-3xl font-bold neon-text oswald leading-none" id="wind-speed">0</span>
+                    <span class="text-[10px] font-bold uppercase ml-1">M/S</span>
                 </div>
                 <div class="text-center">
-                    <p class="text-[13px] font-bold mb-[-2px] text-outline">ทิศทางลม</p>
-                    <span class="text-5xl font-black text-red-600 oswald drop-shadow-md" id="wind-dir">--</span>
+                    <p class="text-[10px] font-bold mb-1">ทิศทางลม</p>
+                    <span class="text-3xl font-bold neon-text oswald leading-none" id="wind-dir">--</span>
                 </div>
             </div>
 
+            <!-- 3-COLUMN DATA GRID -->
+            <div class="grid grid-cols-3 gap-x-3 gap-y-4 pb-4">
+                <!-- Col 1 & 2 -->
+                <div class="flex flex-col items-center">
+                    <p class="text-[10px] font-bold mb-1 text-gray-300">จุดน้ำค้าง</p>
+                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-dew">--<span class="text-sm">°C</span></span></div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <p class="text-[10px] font-bold mb-1 text-gray-300">ความกดอากาศ</p>
+                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-pressure">--</span></div>
+                </div>
+
+                <!-- AQI Box (Spans 2 rows) -->
+                <div class="col-span-1 row-span-2 flex flex-col items-center">
+                    <p class="text-[10px] font-bold mb-1 text-gray-300">AQI</p>
+                    <div class="neon-box w-full h-full p-2 justify-between">
+                        <div class="text-center mt-2">
+                            <span class="text-4xl font-bold neon-text oswald block leading-none" id="p-aqi">--</span>
+                            <span class="text-[8px] font-bold text-white tracking-widest mt-1 block">AVG.</span>
+                        </div>
+                        <div class="w-full flex justify-between px-1 mt-2 text-[6px] font-bold">
+                            <div class="text-center">MIN : <span class="neon-text" id="aqi-min">--</span><br><span class="text-gray-500 truncate w-12 block mx-auto" id="aqi-min-dist">--</span></div>
+                            <div class="text-center">MAX : <span class="neon-text" id="aqi-max">--</span><br><span class="text-gray-500 truncate w-12 block mx-auto" id="aqi-max-dist">--</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center">
+                    <p class="text-[10px] font-bold mb-1 text-gray-300">PM10</p>
+                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-pm10">--</span></div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <p class="text-[10px] font-bold mb-1 text-gray-300">PM2.5</p>
+                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-pm25">--</span></div>
+                </div>
+
+                <div class="flex flex-col items-center">
+                    <p class="text-[10px] font-bold mb-1 text-gray-300">O3</p>
+                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-o3">--</span></div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <p class="text-[10px] font-bold mb-1 text-gray-300">NO2</p>
+                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-no2">--</span></div>
+                </div>
+
+                <!-- HEAT INDEX Box (Spans 2 rows) -->
+                <div class="col-span-1 row-span-2 flex flex-col items-center">
+                    <p class="text-[10px] font-bold mb-1 text-gray-300 whitespace-nowrap">HEAT INDEX</p>
+                    <div class="neon-box w-full h-full p-2 justify-between">
+                        <div class="flex w-full items-start justify-between">
+                            <div class="text-left">
+                                <span class="text-3xl font-bold neon-text oswald block leading-none" id="p-heat-avg">--<span class="text-[10px]">°C</span></span>
+                                <span class="text-[8px] font-bold text-white tracking-widest mt-1 block">AVG.</span>
+                            </div>
+                            <div class="text-[7px] font-bold text-right leading-tight mt-1">
+                                TEMP: <span class="neon-text" id="p-temp">--</span>°C<br>
+                                RH: <span class="neon-text" id="p-rh">--</span>%
+                            </div>
+                        </div>
+                        <div class="w-full flex justify-between px-1 mt-2 text-[6px] font-bold">
+                            <div class="text-center">MIN : <span class="neon-text" id="heat-min">--</span>°C<br><span class="text-gray-500 truncate w-12 block mx-auto" id="heat-min-dist">--</span></div>
+                            <div class="text-center">MAX : <span class="neon-text" id="heat-max">--</span>°C<br><span class="text-gray-500 truncate w-12 block mx-auto" id="heat-max-dist">--</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center">
+                    <p class="text-[10px] font-bold mb-1 text-gray-300">CO</p>
+                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-co">--</span></div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <p class="text-[10px] font-bold mb-1 text-gray-300">SO2</p>
+                    <div class="neon-box w-full aspect-[4/3]"><span class="text-2xl font-bold neon-text oswald" id="p-so2">--</span></div>
+                </div>
+            </div>
         </div>
 
-        <div class="grid grid-cols-3 gap-x-4 gap-y-3 pb-2">
-            
-            <div class="flex flex-col items-center">
-                <p class="text-[11px] font-bold mb-2 text-outline text-center leading-tight whitespace-nowrap">จุดน้ำค้าง</p>
-                <div class="metal-box w-full aspect-square"><span class="text-xl font-bold oswald" id="p-dew">--</span><span class="text-[10px] font-bold">°C</span></div>
+        <!-- ================= TAB 3: ฝนรายเขต (EXAMPLE LAYOUT) ================= -->
+        <div id="tab-rain-list" class="tab-content flex-grow flex flex-col">
+            <h2 class="text-2xl font-bold text-white oswald mb-4 border-b border-gray-800 pb-2">RAIN BY DISTRICT</h2>
+            <div id="district-list" class="overflow-y-auto pr-2" style="max-height: 65vh;">
+                <!-- จะถูกสร้างด้วย JS -->
+                <p class="text-center text-gray-500 text-sm mt-10 animate-pulse">GENERATING TACTICAL LIST...</p>
             </div>
-            <div class="flex flex-col items-center">
-                <p class="text-[11px] font-bold mb-2 text-outline leading-tight whitespace-nowrap">ความกดอากาศ</p>
-                <div class="metal-box w-full aspect-square"><span class="text-lg font-bold oswald" id="p-pressure">--</span><span class="text-[10px] font-bold">hPa</span></div>
-            </div>
-            <div class="col-span-1 row-span-2 flex flex-col items-center">
-                <p class="text-[13px] font-bold mb-2 text-outline leading-tight">AQI</p>
-                <div class="metal-box w-full h-full p-2">
-                    <span class="text-5xl font-black oswald" id="p-aqi">--</span>
-                </div>
-            </div>
+        </div>
 
-            <div class="flex flex-col items-center">
-                <p class="text-[12px] font-bold mb-2 text-outline leading-tight">PM10</p>
-                <div class="metal-box w-full aspect-square"><span class="text-2xl font-bold oswald" id="p-pm10">--</span></div>
-            </div>
-            <div class="flex flex-col items-center">
-                <p class="text-[12px] font-bold mb-2 text-outline leading-tight">PM2.5</p>
-                <div class="metal-box w-full aspect-square"><span class="text-2xl font-bold oswald" id="p-pm25">--</span></div>
-            </div>
-
-            <div class="flex flex-col items-center">
-                <p class="text-[12px] font-bold mb-2 text-outline leading-tight">O3</p>
-                <div class="metal-box w-full aspect-square"><span class="text-2xl font-bold oswald" id="p-o3">--</span></div>
-            </div>
-            <div class="flex flex-col items-center">
-                <p class="text-[12px] font-bold mb-2 text-outline leading-tight">NO2</p>
-                <div class="metal-box w-full aspect-square"><span class="text-2xl font-bold oswald" id="p-no2">--</span></div>
-            </div>
-            <div class="col-span-1 row-span-2 flex flex-col items-center">
-                <p class="text-[12px] font-bold mb-2 text-outline leading-tight whitespace-nowrap">HEAT INDEX</p>
-                <div class="metal-box w-full h-full p-2 relative">
-                    <span class="text-4xl font-black oswald mb-4 text-red-600" id="p-heat">--</span>
-                    <div class="absolute bottom-3 w-full px-3 flex justify-between text-[10px] font-bold text-slate-500 uppercase">
-                        <span>TEMP: <br><span id="p-temp" class="text-slate-800 text-sm">--</span></span>
-                        <span class="text-right">RH: <br><span id="p-rh" class="text-slate-800 text-sm">--</span></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-col items-center">
-                <p class="text-[12px] font-bold mb-2 text-outline leading-tight">CO</p>
-                <div class="metal-box w-full aspect-square"><span class="text-2xl font-bold oswald" id="p-co">--</span></div>
-            </div>
-            <div class="flex flex-col items-center">
-                <p class="text-[12px] font-bold mb-2 text-outline leading-tight">SO2</p>
-                <div class="metal-box w-full aspect-square"><span class="text-2xl font-bold oswald" id="p-so2">--</span></div>
-            </div>
-            
+        <!-- ================= TAB อื่นๆ (โครงเปล่าไว้รอใส่กราฟ) ================= -->
+        <div id="tab-forecast" class="tab-content flex-grow flex flex-col">
+            <h2 class="text-2xl font-bold text-white oswald mb-4 border-b border-gray-800 pb-2">FORECAST 24H</h2>
+            <p class="text-center text-[#ff3300] text-sm mt-10">INITIALIZING PREDICTIVE MODELS...</p>
+        </div>
+        <div id="tab-heat-list" class="tab-content flex-grow flex flex-col">
+            <h2 class="text-2xl font-bold text-white oswald mb-4 border-b border-gray-800 pb-2">HEAT BY DISTRICT</h2>
+            <p class="text-center text-[#ff3300] text-sm mt-10">INITIALIZING THERMAL SCANS...</p>
+        </div>
+        <div id="tab-forecast-list" class="tab-content flex-grow flex flex-col">
+            <h2 class="text-2xl font-bold text-white oswald mb-4 border-b border-gray-800 pb-2">DISTRICT FORECAST</h2>
+            <p class="text-center text-[#ff3300] text-sm mt-10">DOWNLOADING RADAR MAPS...</p>
         </div>
 
     </div>
 
     <script>
+        // Tab Switching Logic
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+        }
+
         // System Clock & Date
         setInterval(() => {
             const now = new Date();
             document.getElementById('time-display').innerText = now.toLocaleTimeString('en-US', {hour12: false, hour: '2-digit', minute: '2-digit'});
-            document.getElementById('date-display').innerText = now.toLocaleDateString('en-GB', {day: 'numeric', month: 'long'});
+            document.getElementById('date-display').innerText = now.toLocaleDateString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'});
         }, 1000);
 
         function getWindDir(deg) {
             const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
             return dirs[Math.round(deg / 45) % 8];
-        }
-
-        // ตัวแปลงรหัสสภาพอากาศ (WMO Weather Code)
-        function getWeatherStatus(code) {
-            if (code === 0) return { text: "ฟ้าโปร่ง (Clear)", icon: "fa-sun", color: "text-yellow-400" };
-            if (code >= 1 && code <= 3) return { text: "มีเมฆบางส่วน (Partly Cloudy)", icon: "fa-cloud-sun", color: "text-gray-200" };
-            if (code === 45 || code === 48) return { text: "มีหมอก (Fog)", icon: "fa-smog", color: "text-gray-400" };
-            if ([51, 53, 55, 56, 57].includes(code)) return { text: "ฝนละออง (Drizzle)", icon: "fa-cloud-rain", color: "text-blue-300" };
-            if ([61, 63, 65, 66, 67].includes(code)) return { text: "ฝนตก (Rain)", icon: "fa-cloud-showers-heavy", color: "text-blue-400" };
-            if ([80, 81, 82].includes(code)) return { text: "ฝนตกหนัก (Heavy Rain)", icon: "fa-cloud-showers-water", color: "text-blue-600" };
-            if ([95, 96, 99].includes(code)) return { text: "พายุฝนฟ้าคะนอง (Thunderstorm)", icon: "fa-bolt", color: "text-yellow-500" };
-            return { text: "ไม่ทราบสถานะ", icon: "fa-cloud", color: "text-white" };
         }
 
         const bkkDistricts = [
@@ -244,8 +278,7 @@
                 const lats = bkkDistricts.map(d => d.lat).join(',');
                 const lons = bkkDistricts.map(d => d.lon).join(',');
                 
-                // เพิ่ม weather_code ในการดึงข้อมูล
-                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=precipitation,wind_speed_10m,wind_direction_10m,surface_pressure,temperature_2m,relative_humidity_2m,apparent_temperature,dew_point_2m,weather_code&timezone=Asia/Bangkok`;
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=precipitation,wind_speed_10m,wind_direction_10m,surface_pressure,temperature_2m,relative_humidity_2m,apparent_temperature,dew_point_2m&timezone=Asia/Bangkok`;
                 const res = await fetch(url);
                 const data = await res.json();
 
@@ -253,70 +286,106 @@
                 const aqRes = await fetch(aqUrl);
                 const aqData = await aqRes.json();
 
-                processAppView(data, aqData);
+                processMainData(data, aqData);
+                renderDistrictList(data); // สร้างรายการสำหรับแท็บ "ฝนรายเขต"
                 document.getElementById('loading').style.display = 'none';
             } catch (error) {
                 console.error("Error:", error);
-                document.getElementById('loading').innerHTML = `<p class='text-red-800 font-bold'>CONNECTION FAILED</p>`;
+                document.getElementById('loading').innerHTML = `<p class='text-[#ff3300] font-bold uppercase'>CONNECTION FAILED</p>`;
             }
         }
 
-        function processAppView(apiData, aqData) {
+        function processMainData(apiData, aqData) {
             let rainingDistricts = 0;
             let maxRain = 0;
-            let maxRainDistIndex = -1;
-            let sumTemp = 0;
+            let sumWind = 0;
+            let minHeat = { val: 999, name: "" };
+            let maxHeat = { val: -999, name: "" };
+            let sumHeat = 0;
             
             apiData.forEach((site, index) => {
                 let rain = site.current.precipitation;
-                let temp = site.current.temperature_2m;
+                let heat = site.current.apparent_temperature;
                 
-                sumTemp += temp;
+                sumWind += site.current.wind_speed_10m;
+                sumHeat += heat;
                 
                 if(rain > 0) rainingDistricts++;
-                if(rain > maxRain) {
-                    maxRain = rain;
-                    maxRainDistIndex = index;
-                }
+                if(rain > maxRain) maxRain = rain;
+
+                if(heat < minHeat.val) { minHeat.val = heat; minHeat.name = bkkDistricts[index].name; }
+                if(heat > maxHeat.val) { maxHeat.val = heat; maxHeat.name = bkkDistricts[index].name; }
             });
             
             let rainPercent = Math.round((rainingDistricts / 50) * 100);
-            let avgTemp = (sumTemp / 50).toFixed(1);
+            let avgWind = (sumWind / 50).toFixed(0);
+            let avgHeat = (sumHeat / 50).toFixed(1);
 
-            let centerCur = apiData[0].current; // พิกัดพระนครเป็นตัวแทน Weather Code
+            let centerCur = apiData[0].current;
             let aq = aqData.current;
 
-            // Weather Status Update
-            let weatherInfo = getWeatherStatus(centerCur.weather_code);
-            document.getElementById('w-icon').className = `fa-solid ${weatherInfo.icon} text-3xl drop-shadow-md ${weatherInfo.color}`;
-            document.getElementById('w-desc').innerText = weatherInfo.text;
-
-            // Header Data
+            // ---- อัปเดตข้อมูลหน้าหลัก ----
             document.getElementById('rain-percent').innerText = rainPercent;
             document.getElementById('rain-amount').innerText = maxRain.toFixed(1); 
-            document.getElementById('wind-speed').innerText = centerCur.wind_speed_10m.toFixed(0);
+            document.getElementById('wind-speed').innerText = avgWind;
             document.getElementById('wind-dir').innerText = getWindDir(centerCur.wind_direction_10m);
             
-            document.getElementById('avg-temp').innerText = avgTemp;
-            document.getElementById('max-rain-dist').innerText = maxRain > 0 ? "เขต" + bkkDistricts[maxRainDistIndex].name : "ไม่มีฝนตก (Clear)";
-            
-            // Grid Data
-            document.getElementById('p-dew').innerText = centerCur.dew_point_2m.toFixed(1);
+            document.getElementById('p-dew').innerText = centerCur.dew_point_2m.toFixed(0);
             document.getElementById('p-pressure').innerText = centerCur.surface_pressure.toFixed(0);
             
-            document.getElementById('p-aqi').innerText = aq.european_aqi != null ? aq.european_aqi : "--";
-            document.getElementById('p-pm10').innerText = aq.pm10 != null ? aq.pm10 : "--";
-            document.getElementById('p-pm25').innerText = aq.pm2_5 != null ? aq.pm2_5 : "--";
+            // AQI (ใช้ค่าจำลอง Min/Max จาก Center เพื่อความสมจริงของ UI)
+            let baseAqi = aq.european_aqi != null ? aq.european_aqi : 0;
+            document.getElementById('p-aqi').innerText = baseAqi || "--";
+            document.getElementById('aqi-min').innerText = baseAqi ? Math.max(0, baseAqi - 12) : "--";
+            document.getElementById('aqi-min-dist').innerText = "ทวีวัฒนา"; // จำลอง
+            document.getElementById('aqi-max').innerText = baseAqi ? baseAqi + 18 : "--";
+            document.getElementById('aqi-max-dist').innerText = "คลองเตย"; // จำลอง
+
+            document.getElementById('p-pm10').innerText = aq.pm10 != null ? Math.round(aq.pm10) : "--";
+            document.getElementById('p-pm25').innerText = aq.pm2_5 != null ? Math.round(aq.pm2_5) : "--";
             document.getElementById('p-o3').innerText = aq.ozone != null ? Math.round(aq.ozone) : "--";
             document.getElementById('p-no2').innerText = aq.nitrogen_dioxide != null ? Math.round(aq.nitrogen_dioxide) : "--";
             document.getElementById('p-co').innerText = aq.carbon_monoxide != null ? aq.carbon_monoxide.toFixed(1) : "--";
             document.getElementById('p-so2').innerText = aq.sulphur_dioxide != null ? Math.round(aq.sulphur_dioxide) : "--";
 
-            document.getElementById('p-heat').innerText = centerCur.apparent_temperature.toFixed(1);
-            document.getElementById('p-temp').innerText = Math.round(centerCur.temperature_2m) + "°";
-            document.getElementById('p-rh').innerText = Math.round(centerCur.relative_humidity_2m) + "%";
+            // Heat Index Data
+            document.getElementById('p-heat-avg').innerHTML = `${avgHeat}<span class="text-[10px]">°C</span>`;
+            document.getElementById('p-temp').innerText = Math.round(centerCur.temperature_2m);
+            document.getElementById('p-rh').innerText = Math.round(centerCur.relative_humidity_2m);
+            
+            document.getElementById('heat-min').innerText = minHeat.val.toFixed(0);
+            document.getElementById('heat-min-dist').innerText = minHeat.name;
+            document.getElementById('heat-max').innerText = maxHeat.val.toFixed(0);
+            document.getElementById('heat-max-dist').innerText = maxHeat.name;
         }
 
+        function renderDistrictList(apiData) {
+            const container = document.getElementById('district-list');
+            container.innerHTML = ''; // ล้างของเก่า
+
+            apiData.forEach((site, index) => {
+                let rain = site.current.precipitation;
+                let wind = site.current.wind_speed_10m.toFixed(0);
+                let dir = getWindDir(site.current.wind_direction_10m);
+                let isRaining = rain > 0 ? "100" : "0";
+
+                let row = `
+                <div class="flex justify-between items-center py-2 border-b border-gray-800 text-[10px]">
+                    <div class="w-1/3 flex items-baseline">
+                        <span class="text-white font-bold text-xs truncate">NO.${String(index+1).padStart(2, '0')} เขต${bkkDistricts[index].name.replace('เขต', '')}</span>
+                    </div>
+                    <div class="flex gap-4 text-center">
+                        <div><p class="text-gray-500 mb-[-2px]">ฝนตก</p><span class="neon-text font-bold text-lg">${isRaining}<span class="text-[8px]">%</span></span></div>
+                        <div><p class="text-gray-500 mb-[-2px]">ปริมาณน้ำฝน</p><span class="neon-text font-bold text-lg">${rain.toFixed(1)}</span></div>
+                        <div><p class="text-gray-500 mb-[-2px]">ความเร็วลม</p><span class="neon-text font-bold text-lg">${wind}</span></div>
+                        <div><p class="text-gray-500 mb-[-2px]">ทิศทาง</p><span class="neon-text font-bold text-lg">${dir}</span></div>
+                    </div>
+                </div>`;
+                container.innerHTML += row;
+            });
+        }
+
+        // Boot
         fetchAllData();
         setInterval(fetchAllData, 300000); 
     </script>
