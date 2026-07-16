@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BKK AIR FORCE ONE - TACTICAL NEON v5</title>
+    <title>BKK AIR FORCE ONE - TACTICAL NEON v6</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
@@ -47,7 +47,7 @@
             <p id="retry-msg" class="hidden text-gray-500 text-[10px] mt-2 text-center px-4">API Rate Limit Hit.<br>Auto-retrying in <span id="countdown">5</span> seconds...</p>
         </div>
 
-        <!-- HEADER NAVIGATION (FIXED) -->
+        <!-- HEADER NAVIGATION -->
         <div class="px-5 pt-5 flex flex-col flex-shrink-0 bg-black z-10">
             <div class="flex justify-between items-center mb-4 overflow-x-auto custom-scroll border-b border-gray-900 gap-3">
                 <span class="nav-link active text-[10px] uppercase tracking-wider" onclick="switchTab('tab-main', this)">หน้าหลัก</span>
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <!-- ================= TAB 1: หน้าหลัก (REAL-TIME) - REDESIGNED PROPORTIONS ================= -->
+        <!-- ================= TAB 1: หน้าหลัก (REAL-TIME) ================= -->
         <div id="tab-main" class="tab-content active px-5 pb-5 custom-scroll">
             
             <div class="flex justify-between items-end mb-4 pb-4 border-b border-gray-900">
@@ -72,7 +72,7 @@
                 </div>
             </div>
             
-            <!-- TOP METRICS (Rain/Wind) -->
+            <!-- TOP METRICS -->
             <div class="flex justify-between items-start mb-6 mt-2">
                 <div class="flex items-baseline pt-1">
                     <span class="text-lg font-normal mr-3 text-white">ฝนตก</span>
@@ -101,14 +101,11 @@
                 </div>
             </div>
 
-            <!-- GRID (AQI / HEAT) - PROPORTIONAL FIX -->
-            <!-- ใส่ flex-grow ให้ตารางกินพื้นที่ที่เหลือ และช่องว่าง gap-y-4 ดันให้ตารางดูเต็มตา -->
+            <!-- GRID DATA -->
             <div class="grid grid-cols-3 gap-x-3 gap-y-4 flex-grow content-end pb-2">
                 
-                <!-- Row 1 -->
                 <div class="flex flex-col items-center">
                     <span class="text-[10px] font-normal mb-1 text-gray-400 uppercase tracking-wider">จุดน้ำค้าง</span>
-                    <!-- ใช้ aspect-[4/3] เพื่อให้กล่องอ้วนสมส่วน ไม่แบนเกินไป -->
                     <div class="neon-box w-full aspect-[4/3] flex items-center justify-center"><span class="text-2xl font-bold neon-text oswald" id="p-dew">--<span class="text-sm font-normal">°C</span></span></div>
                 </div>
                 <div class="flex flex-col items-center">
@@ -116,13 +113,14 @@
                     <div class="neon-box w-full aspect-[4/3] flex items-center justify-center"><span class="text-2xl font-bold neon-text oswald" id="p-pressure">--</span></div>
                 </div>
                 
-                <!-- AQI Box (Spans 2 rows) -->
+                <!-- AQI Box (ขยายตัวเลขให้สมส่วน) -->
                 <div class="col-span-1 row-span-2 flex flex-col items-center h-full">
                     <span class="text-[11px] font-normal mb-1 text-gray-400 uppercase tracking-wider">AQI</span>
                     <div class="neon-box w-full flex-grow flex flex-col justify-between py-3 px-2">
-                        <div class="text-center mt-2">
-                            <span class="text-[3.5rem] font-bold neon-text oswald leading-none tracking-tighter" id="p-aqi">--</span>
-                            <span class="text-[9px] font-bold text-white block mt-1 tracking-wider">AVG.</span>
+                        <div class="text-center mt-3 flex flex-col items-center">
+                            <!-- เพิ่มขนาดฟอนต์เป็น 4.5rem -->
+                            <span class="text-[4.5rem] font-bold neon-text oswald leading-none tracking-tighter" id="p-aqi">--</span>
+                            <span class="text-[10px] font-bold text-white block mt-1 tracking-wider">AVG.</span>
                         </div>
                         <div class="flex justify-between w-full text-[8px] font-bold mt-auto pt-2 border-t border-gray-900">
                             <div class="text-left leading-tight">MIN: <span class="neon-text" id="aqi-min">--</span><br><span class="text-gray-500 font-normal truncate block w-10">ทวีวัฒนา</span></div>
@@ -131,7 +129,6 @@
                     </div>
                 </div>
 
-                <!-- Row 2 -->
                 <div class="flex flex-col items-center">
                     <span class="text-[10px] font-normal mb-1 text-gray-400 uppercase tracking-wider">PM10</span>
                     <div class="neon-box w-full aspect-[4/3] flex items-center justify-center"><span class="text-2xl font-bold neon-text oswald" id="p-pm10">--</span></div>
@@ -140,8 +137,6 @@
                     <span class="text-[10px] font-normal mb-1 text-gray-400 uppercase tracking-wider">PM2.5</span>
                     <div class="neon-box w-full aspect-[4/3] flex items-center justify-center"><span class="text-2xl font-bold neon-text oswald" id="p-pm25">--</span></div>
                 </div>
-
-                <!-- Row 3 -->
                 <div class="flex flex-col items-center">
                     <span class="text-[10px] font-normal mb-1 text-gray-400 uppercase tracking-wider">O3</span>
                     <div class="neon-box w-full aspect-[4/3] flex items-center justify-center"><span class="text-2xl font-bold neon-text oswald" id="p-o3">--</span></div>
@@ -151,16 +146,20 @@
                     <div class="neon-box w-full aspect-[4/3] flex items-center justify-center"><span class="text-2xl font-bold neon-text oswald" id="p-no2">--</span></div>
                 </div>
                 
-                <!-- HEAT INDEX Box (Spans 2 rows) -->
+                <!-- HEAT INDEX Box (ขยายตัวเลขให้สมส่วน) -->
                 <div class="col-span-1 row-span-2 flex flex-col items-center h-full">
                     <span class="text-[11px] font-normal mb-1 text-gray-400 uppercase tracking-wider whitespace-nowrap">HEAT INDEX</span>
                     <div class="neon-box w-full flex-grow flex flex-col justify-between py-3 px-2">
-                        <div class="flex justify-between items-start w-full">
-                            <div>
-                                <span class="text-[2.5rem] font-bold neon-text oswald leading-none tracking-tighter" id="p-heat-avg">--</span><span class="neon-text text-[10px]">°C</span>
-                                <span class="text-[9px] font-bold text-white block mt-1 tracking-wider">AVG.</span>
+                        <div class="flex justify-between items-start w-full mt-1">
+                            <div class="flex flex-col">
+                                <div class="flex items-baseline">
+                                    <!-- เพิ่มขนาดฟอนต์เป็น 4rem -->
+                                    <span class="text-[4rem] font-bold neon-text oswald leading-none tracking-tighter" id="p-heat-avg">--</span>
+                                    <span class="neon-text text-sm font-bold oswald ml-0.5">°C</span>
+                                </div>
+                                <span class="text-[10px] font-bold text-white block mt-0.5 tracking-wider">AVG.</span>
                             </div>
-                            <div class="text-[7px] font-bold text-right text-white leading-tight">
+                            <div class="text-[7px] font-bold text-right text-white leading-tight mt-1">
                                 T: <span class="neon-text" id="p-temp">--°</span><br>
                                 H: <span class="neon-text" id="p-rh">--%</span>
                             </div>
@@ -172,7 +171,6 @@
                     </div>
                 </div>
 
-                <!-- Row 4 -->
                 <div class="flex flex-col items-center">
                     <span class="text-[10px] font-normal mb-1 text-gray-400 uppercase tracking-wider">CO</span>
                     <div class="neon-box w-full aspect-[4/3] flex items-center justify-center"><span class="text-2xl font-bold neon-text oswald" id="p-co">--</span></div>
@@ -184,7 +182,7 @@
             </div>
         </div>
 
-        <!-- ================= TAB 2: พยากรณ์ (FORECAST) ================= -->
+        <!-- ================= TAB 2: พยากรณ์ ================= -->
         <div id="tab-forecast" class="tab-content px-5 pb-5 custom-scroll">
             <div class="flex justify-between items-end mb-6 pb-4 border-b border-gray-900">
                 <div>
@@ -199,7 +197,7 @@
                 </div>
             </div>
 
-            <!-- SECTION: RAIN FORECAST -->
+            <!-- RAIN FORECAST -->
             <div class="mb-6">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex flex-col text-left w-1/4 leading-tight">
@@ -239,7 +237,7 @@
                 </div>
             </div>
 
-            <!-- SECTION: HEAT FORECAST -->
+            <!-- HEAT FORECAST -->
             <div class="mb-4 pt-6 border-t border-gray-900">
                 <div class="flex justify-between items-end mb-4">
                     <div class="flex items-baseline w-[40%]">
@@ -267,13 +265,12 @@
             </div>
         </div>
 
-        <!-- ================= TAB 3: ฝนรายเขต ================= -->
+        <!-- ================= TAB 3 & 4: LISTS ================= -->
         <div id="tab-rain-list" class="tab-content px-5 pb-5">
             <h2 class="text-2xl font-black text-white oswald mb-3 border-b border-gray-900 pb-1 tracking-widest">RAIN BY DISTRICT</h2>
             <div id="district-list" class="flex-grow overflow-y-auto list-scroll pr-2"></div>
         </div>
 
-        <!-- ================= TAB 4: ความร้อนรายเขต ================= -->
         <div id="tab-heat-list" class="tab-content px-5 pb-5">
             <h2 class="text-2xl font-black text-white oswald mb-3 border-b border-gray-900 pb-1 tracking-widest">HEAT BY DISTRICT</h2>
             <div id="heat-list" class="flex-grow overflow-y-auto list-scroll pr-2"></div>
@@ -321,6 +318,7 @@
         async function fetchAllData() {
             try {
                 document.getElementById('loading').style.display = 'flex';
+                document.getElementById('retry-msg').classList.add('hidden');
                 
                 const lats = bkkDistricts.map(d => d.lat).join(',');
                 const lons = bkkDistricts.map(d => d.lon).join(',');
@@ -467,24 +465,12 @@
 
             cRain = new Chart(document.getElementById('chart-fc-rain').getContext('2d'), {
                 type: 'line', data: { labels: times, datasets: [{ data: centerHourly.precipitation_probability, borderColor: '#ff3300', backgroundColor: 'rgba(255,51,0,0.05)', borderWidth: 1.5, fill: true }] },
-                options: {
-                    ...baseOpts,
-                    scales: {
-                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#777', font: { size: 8 }, maxRotation: 45, minRotation: 45, maxTicksLimit: 12 } },
-                        y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#777', font: { size: 8 }, stepSize: 20 } }
-                    }
-                }
+                options: { ...baseOpts, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#777', font: { size: 8 }, maxRotation: 45, minRotation: 45, maxTicksLimit: 12 } }, y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#777', font: { size: 8 }, stepSize: 20 } } } }
             });
 
             cHeat = new Chart(document.getElementById('chart-fc-heat').getContext('2d'), {
                 type: 'line', data: { labels: times, datasets: [{ data: centerHourly.apparent_temperature, borderColor: '#ff3300', backgroundColor: 'rgba(255,51,0,0.05)', borderWidth: 1.5, fill: true }] },
-                options: {
-                    ...baseOpts,
-                    scales: {
-                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#777', font: { size: 8 }, maxRotation: 45, minRotation: 45, maxTicksLimit: 12 } },
-                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#777', font: { size: 8 } } }
-                    }
-                }
+                options: { ...baseOpts, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#777', font: { size: 8 }, maxRotation: 45, minRotation: 45, maxTicksLimit: 12 } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#777', font: { size: 8 } } } } }
             });
         }
 
