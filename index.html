@@ -8,7 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        /* เปลี่ยนพื้นหลังให้เหมือนควันดรายไอซ์ในผับยุค 90 */
         body { 
             font-family: 'Prompt', sans-serif; 
             background: radial-gradient(circle at center, #0a0518 0%, #000000 100%); 
@@ -38,21 +37,13 @@
         .disco-cyan { color: #00ffff; text-shadow: 0 0 12px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.4); }
         .disco-lime { color: #39ff14; text-shadow: 0 0 10px rgba(57, 255, 20, 0.8); }
         
-        /* กล่องเธคสะท้อนแสงไฟวิบวับ */
         .disco-box { 
             border: 1px solid #ff007f; 
             border-radius: 8px; 
             background: rgba(255, 0, 127, 0.03); 
             box-shadow: inset 0 0 12px rgba(255, 0, 127, 0.1), 0 0 8px rgba(0, 255, 255, 0.2); 
         }
-        .disco-box-cyan { 
-            border: 1px solid #00ffff; 
-            border-radius: 8px; 
-            background: rgba(0, 255, 255, 0.02); 
-            box-shadow: inset 0 0 12px rgba(0, 255, 255, 0.1), 0 0 8px rgba(255, 0, 127, 0.2); 
-        }
 
-        /* ไฟกระพริบสลับสีแบบนุ่มๆ (Pulse Grid Animation) */
         @keyframes discoPulse {
             0%, 100% { border-color: #ff007f; box-shadow: 0 0 8px rgba(255, 0, 127, 0.4); }
             50% { border-color: #00ffff; box-shadow: 0 0 15px rgba(0, 255, 255, 0.6); }
@@ -78,15 +69,18 @@
 
     <div class="app-container flex flex-col justify-start">
         
+        <!-- LOADING SCREEN STYLED AS DISCO INFRARED (แก้ไขบั๊กเพิ่ม ID แล้ว) -->
         <div id="loading" class="absolute inset-0 bg-black z-50 flex flex-col justify-center items-center">
-            <div class="w-12 h-10 flex justify-between gap-1">
+            <div id="loading-spinner" class="w-12 h-10 flex justify-between gap-1">
                 <div class="w-2 bg-[#ff007f] h-full animate-bounce"></div>
                 <div class="w-2 bg-[#00ffff] h-full animate-bounce [animation-delay:0.2s]"></div>
                 <div class="w-2 bg-[#39ff14] h-full animate-bounce [animation-delay:0.4s]"></div>
             </div>
-            <p class="font-bold tracking-widest disco-cyan text-xs mt-4 animate-pulse">TUNING LIGHTS & SOUNDS...</p>
+            <p id="loading-text" class="font-bold tracking-widest disco-cyan text-xs mt-4 animate-pulse">TUNING LIGHTS & SOUNDS...</p>
+            <p id="retry-msg" class="hidden text-purple-300 text-[10px] mt-2 text-center px-4">DJ BOOTH OVERLOADED.<br>REBOOTING IN <span id="countdown" class="disco-pink text-sm">5</span> SECONDS...</p>
         </div>
 
+        <!-- HEADER NAVIGATION -->
         <div class="px-5 pt-5 flex flex-col flex-shrink-0 bg-black/40 backdrop-blur-md z-10">
             <div class="flex justify-between items-center mb-4 overflow-x-auto custom-scroll border-b border-purple-950 gap-4">
                 <span class="nav-link active text-xs uppercase tracking-wider" onclick="switchTab('tab-main', this)">หน้าหลัก</span>
@@ -96,6 +90,7 @@
             </div>
         </div>
 
+        <!-- ================= TAB 1: หน้าหลัก ================= -->
         <div id="tab-main" class="tab-content active px-5 pb-5 custom-scroll">
             
             <div class="flex justify-between items-end mb-4 pb-4 border-b border-purple-950/60">
@@ -149,6 +144,7 @@
                     <div class="disco-box w-full aspect-[4/3] flex items-center justify-center"><span class="text-2xl font-bold disco-pink oswald" id="p-pressure">--</span></div>
                 </div>
                 
+                <!-- AQI Box -->
                 <div class="col-span-1 row-span-2 flex flex-col items-center h-full">
                     <span class="text-[11px] font-normal mb-1 text-purple-300 uppercase tracking-wider">AQI</span>
                     <div class="disco-box disco-pulse w-full flex-grow flex flex-col justify-between py-3 px-2">
@@ -181,6 +177,7 @@
                     <div class="disco-box w-full aspect-[4/3] flex items-center justify-center"><span class="text-2xl font-bold disco-pink oswald" id="p-no2">--</span></div>
                 </div>
                 
+                <!-- HEAT INDEX Box -->
                 <div class="col-span-1 row-span-2 flex flex-col items-center h-full">
                     <span class="text-[11px] font-normal mb-1 text-purple-300 uppercase tracking-wider whitespace-nowrap">HEAT INDEX</span>
                     <div class="disco-box disco-pulse w-full flex-grow flex flex-col justify-between py-3 px-2 relative">
@@ -214,6 +211,7 @@
             </div>
         </div>
 
+        <!-- ================= TAB 2: พยากรณ์ ================= -->
         <div id="tab-forecast" class="tab-content px-5 pb-5 custom-scroll">
             <div class="flex justify-between items-end mb-6 pb-4 border-b border-purple-950">
                 <div>
@@ -294,6 +292,7 @@
             </div>
         </div>
 
+        <!-- ================= TAB 3 & 4 ================= -->
         <div id="tab-rain-list" class="tab-content px-5 pb-5">
             <h2 class="text-2xl font-black disco-cyan oswald mb-3 border-b border-purple-950 pb-1 tracking-widest">RAIN BY DISTRICT</h2>
             <div id="district-list" class="flex-grow overflow-y-auto list-scroll pr-2"></div>
@@ -327,7 +326,6 @@
             return dirs[Math.round(deg / 45) % 8];
         }
 
-        // ปรับแต่งสีเส้นตารางกราฟให้เข้ากับผับ 90
         Chart.defaults.color = '#503580'; Chart.defaults.font.family = "'Prompt', sans-serif";
         let cRain, cHeat;
 
@@ -369,7 +367,7 @@
                 document.getElementById('loading').style.display = 'none';
             } catch (error) {
                 console.error(error);
-                document.getElementById('loading-text').innerText = "CONNECTION FAILED";
+                document.getElementById('loading-text').innerText = "DJ BOOTH ERROR";
                 document.getElementById('loading-spinner').classList.add('hidden');
                 document.getElementById('retry-msg').classList.remove('hidden');
                 
@@ -410,7 +408,6 @@
             
             let baseAqi = aq.european_aqi || 0;
             
-            // แก้ไขฝังคลาสเลเซอร์จี๊ดจ๊าด (disco-cyan) กลับเข้ามาที่ข้อมูลวิ่ง
             document.getElementById('p-aqi').innerHTML = `<span class="disco-cyan tracking-tighter" style="font-size:4.5rem !important; font-weight:900; font-family:'Oswald', sans-serif;">${baseAqi || '--'}</span>`;
             document.getElementById('aqi-min').innerText = baseAqi ? Math.max(0, baseAqi - 12) : "--";
             document.getElementById('aqi-max').innerText = baseAqi ? baseAqi + 15 : "--";
@@ -423,7 +420,6 @@
             document.getElementById('p-so2').innerText = aq.sulphur_dioxide != null ? Math.round(aq.sulphur_dioxide) : "--";
 
             let displayHeatAvg = Math.round(sumHeat / 50);
-            // แก้ไขฝังคลาสเลเซอร์จี๊ดจ๊าด (disco-pink) กลับเข้ามาที่ข้อมูลวิ่ง
             document.getElementById('p-heat-avg').innerHTML = `<span class="disco-pink tracking-tighter" style="font-size:4rem !important; font-weight:900; font-family:'Oswald', sans-serif;">${displayHeatAvg}</span>`;
             
             document.getElementById('p-temp').innerText = Math.round(centerCur.temperature_2m);
@@ -497,7 +493,6 @@
                 elements: { point: { radius: 0 }, line: { tension: 0.4 } }
             };
 
-            // เปลี่ยนสีเส้นกราฟพยากรณ์เป็นไฟนีออนชมพู/ฟ้าตระการตา
             cRain = new Chart(document.getElementById('chart-fc-rain').getContext('2d'), {
                 type: 'line', data: { labels: times, datasets: [{ data: centerHourly.precipitation_probability, borderColor: '#00ffff', backgroundColor: 'rgba(0,255,255,0.03)', borderWidth: 2, fill: true }] },
                 options: { ...baseOpts, scales: { x: { grid: { color: 'rgba(80,53,128,0.15)' }, ticks: { color: '#64748b', font: { size: 8 }, maxRotation: 45, minRotation: 45, maxTicksLimit: 12 } }, y: { min: 0, max: 100, grid: { color: 'rgba(80,53,128,0.15)' }, ticks: { color: '#64748b', font: { size: 8 }, stepSize: 20 } } } }
