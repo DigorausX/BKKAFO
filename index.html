@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BKK AIR FORCE ONE - TACTICAL NEON v6</title>
+    <title>BKK AIR FORCE ONE - TACTICAL NEON v7</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
@@ -112,7 +112,7 @@
                 <div class="col-span-1 row-span-2 flex flex-col items-center h-full">
                     <span class="text-[11px] font-normal mb-1 text-gray-400 uppercase tracking-wider">AQI</span>
                     <div class="neon-box w-full flex-grow flex flex-col justify-between py-3 px-2">
-                        <div class="text-center mt-3 flex flex-col items-center justify-center flex-grow">
+                        <div class="flex-grow flex flex-col justify-center items-center w-full">
                             <span class="text-[4.5rem] font-bold neon-text oswald leading-none tracking-tighter" id="p-aqi" style="font-size: 4.5rem !important;">--</span>
                             <span class="text-[10px] font-bold text-white block mt-1 tracking-widest">AVG.</span>
                         </div>
@@ -144,17 +144,19 @@
                 <div class="col-span-1 row-span-2 flex flex-col items-center h-full">
                     <span class="text-[11px] font-normal mb-1 text-gray-400 uppercase tracking-wider whitespace-nowrap">HEAT INDEX</span>
                     <div class="neon-box w-full flex-grow flex flex-col justify-between py-3 px-2">
-                        <div class="flex justify-between items-start w-full mt-1">
-                            <div class="flex flex-col">
-                                <div class="flex items-baseline">
-                                    <span class="text-[4rem] font-bold neon-text oswald leading-none tracking-tighter" id="p-heat-avg" style="font-size: 4rem !important;">--</span>
-                                    <span class="neon-text text-sm font-bold oswald ml-0.5">°C</span>
+                        <div class="flex-grow flex flex-col justify-center w-full">
+                            <div class="flex justify-between items-start w-full">
+                                <div class="flex flex-col">
+                                    <div class="flex items-baseline">
+                                        <span class="text-[4rem] font-bold neon-text oswald leading-none tracking-tighter" id="p-heat-avg" style="font-size: 4rem !important;">--</span>
+                                        <span class="neon-text text-sm font-bold oswald ml-0.5">°C</span>
+                                    </div>
+                                    <span class="text-[10px] font-bold text-white block mt-0.5 tracking-wider">AVG.</span>
                                 </div>
-                                <span class="text-[10px] font-bold text-white block mt-0.5 tracking-wider">AVG.</span>
-                            </div>
-                            <div class="text-[7px] font-bold text-right text-white leading-tight mt-1">
-                                T: <span class="neon-text" id="p-temp">--°</span><br>
-                                H: <span class="neon-text" id="p-rh">--%</span>
+                                <div class="text-[7px] font-bold text-right text-white leading-tight mt-1">
+                                    T: <span class="neon-text" id="p-temp">--°</span><br>
+                                    H: <span class="neon-text" id="p-rh">--%</span>
+                                </div>
                             </div>
                         </div>
                         <div class="flex justify-between w-full text-[8px] font-bold mt-auto pt-2 border-t border-gray-900">
@@ -297,7 +299,7 @@
             {name: "ดุสิต", lat: 13.78, lon: 100.52}, {name: "บางซื่อ", lat: 13.82, lon: 100.52}, {name: "จตุจักร", lat: 13.82, lon: 100.56}, {name: "ห้วยขวาง", lat: 13.78, lon: 100.58}, {name: "ดินแดง", lat: 13.76, lon: 100.56},
             {name: "บางกะปิ", lat: 13.76, lon: 100.64}, {name: "บึงกุ่ม", lat: 13.78, lon: 100.66}, {name: "ลาดพร้าว", lat: 13.80, lon: 100.60}, {name: "วังทองหลาง", lat: 13.78, lon: 100.60}, {name: "สวนหลวง", lat: 13.73, lon: 100.63},
             {name: "ประเวศ", lat: 13.71, lon: 100.67}, {name: "พระโขนง", lat: 13.70, lon: 100.60}, {name: "บางนา", lat: 13.67, lon: 100.61}, {name: "ทวีวัฒนา", lat: 13.78, lon: 100.34}, {name: "หนองแขม", lat: 13.70, lon: 100.35},
-            {name: "บางแค", lat: 13.71, lon: 100.39}, {name: "ภาษีเจริญ", lat: 13.72, lon: 100.43}, {name: "ตลิ่งชัน", lat: 13.77, lon: 100.43}, {name: "บางพลัด", lat: 13.79, lon: 100.49}, {name: "บางกokน้อย", lat: 13.76, lon: 100.47},
+            {name: "บางแค", lat: 13.71, lon: 100.39}, {name: "ภาษีเจริญ", lat: 13.72, lon: 100.43}, {name: "ตลิ่งชัน", lat: 13.77, lon: 100.43}, {name: "บางพลัด", lat: 13.79, lon: 100.49}, {name: "บางกอกน้อย", lat: 13.76, lon: 100.47},
             {name: "บางกอกใหญ่", lat: 13.72, lon: 100.48}, {name: "คลองสาน", lat: 13.73, lon: 100.50}, {name: "ธนบุรี", lat: 13.72, lon: 100.49}, {name: "จอมทอง", lat: 13.69, lon: 100.46}, {name: "ราษฎร์บูรณะ", lat: 13.68, lon: 100.50},
             {name: "ทุ่งครุ", lat: 13.63, lon: 100.49}, {name: "บางขุนเทียน", lat: 13.61, lon: 100.43}, {name: "บางบอน", lat: 13.65, lon: 100.39}, {name: "สายไหม", lat: 13.91, lon: 100.64}, {name: "ดอนเมือง", lat: 13.91, lon: 100.59},
             {name: "หลักสี่", lat: 13.88, lon: 100.57}, {name: "บางเขน", lat: 13.86, lon: 100.60}, {name: "คลองสามวา", lat: 13.87, lon: 100.72}, {name: "มีนบุรี", lat: 13.81, lon: 100.74}, {name: "หนองจอก", lat: 13.85, lon: 100.86},
@@ -370,7 +372,6 @@
             
             let baseAqi = aq.european_aqi || 0;
             
-            // ล็อคขนาดฟอนต์ชุดใหญ่แบบ inline ป้องกันข้อมูลทับสไตล์ Tailwind
             document.getElementById('p-aqi').innerHTML = `<span style="font-size:4.5rem !important; font-weight:900; line-height:1;">${baseAqi || '--'}</span>`;
             document.getElementById('aqi-min').innerText = baseAqi ? Math.max(0, baseAqi - 12) : "--";
             document.getElementById('aqi-max').innerText = baseAqi ? baseAqi + 15 : "--";
