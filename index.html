@@ -47,7 +47,6 @@
             <p id="retry-msg" class="hidden text-gray-500 text-[10px] mt-2 text-center px-4">API Rate Limit Hit.<br>Auto-retrying in <span id="countdown">5</span> seconds...</p>
         </div>
 
-        <!-- HEADER NAVIGATION -->
         <div class="px-5 pt-5 flex flex-col flex-shrink-0 bg-black z-10">
             <div class="flex justify-between items-center mb-4 overflow-x-auto custom-scroll border-b border-gray-900 gap-3">
                 <span class="nav-link active text-[10px] uppercase tracking-wider" onclick="switchTab('tab-main', this)">หน้าหลัก</span>
@@ -57,7 +56,6 @@
             </div>
         </div>
 
-        <!-- ================= TAB 1: หน้าหลัก (REAL-TIME) ================= -->
         <div id="tab-main" class="tab-content active px-5 pb-5 custom-scroll">
             
             <div class="flex justify-between items-end mb-4 pb-4 border-b border-gray-900">
@@ -72,7 +70,6 @@
                 </div>
             </div>
             
-            <!-- TOP METRICS -->
             <div class="flex justify-between items-start mb-6 mt-2">
                 <div class="flex items-baseline pt-1">
                     <span class="text-lg font-normal mr-3 text-white">ฝนตก</span>
@@ -101,7 +98,6 @@
                 </div>
             </div>
 
-            <!-- GRID DATA -->
             <div class="grid grid-cols-3 gap-x-3 gap-y-4 flex-grow content-end pb-2">
                 
                 <div class="flex flex-col items-center">
@@ -113,14 +109,12 @@
                     <div class="neon-box w-full aspect-[4/3] flex items-center justify-center"><span class="text-2xl font-bold neon-text oswald" id="p-pressure">--</span></div>
                 </div>
                 
-                <!-- AQI Box (ขยายตัวเลขให้สมส่วน) -->
                 <div class="col-span-1 row-span-2 flex flex-col items-center h-full">
                     <span class="text-[11px] font-normal mb-1 text-gray-400 uppercase tracking-wider">AQI</span>
                     <div class="neon-box w-full flex-grow flex flex-col justify-between py-3 px-2">
-                        <div class="text-center mt-3 flex flex-col items-center">
-                            <!-- เพิ่มขนาดฟอนต์เป็น 4.5rem -->
-                            <span class="text-[4.5rem] font-bold neon-text oswald leading-none tracking-tighter" id="p-aqi">--</span>
-                            <span class="text-[10px] font-bold text-white block mt-1 tracking-wider">AVG.</span>
+                        <div class="text-center mt-3 flex flex-col items-center justify-center flex-grow">
+                            <span class="text-[4.5rem] font-bold neon-text oswald leading-none tracking-tighter" id="p-aqi" style="font-size: 4.5rem !important;">--</span>
+                            <span class="text-[10px] font-bold text-white block mt-1 tracking-widest">AVG.</span>
                         </div>
                         <div class="flex justify-between w-full text-[8px] font-bold mt-auto pt-2 border-t border-gray-900">
                             <div class="text-left leading-tight">MIN: <span class="neon-text" id="aqi-min">--</span><br><span class="text-gray-500 font-normal truncate block w-10">ทวีวัฒนา</span></div>
@@ -137,6 +131,7 @@
                     <span class="text-[10px] font-normal mb-1 text-gray-400 uppercase tracking-wider">PM2.5</span>
                     <div class="neon-box w-full aspect-[4/3] flex items-center justify-center"><span class="text-2xl font-bold neon-text oswald" id="p-pm25">--</span></div>
                 </div>
+
                 <div class="flex flex-col items-center">
                     <span class="text-[10px] font-normal mb-1 text-gray-400 uppercase tracking-wider">O3</span>
                     <div class="neon-box w-full aspect-[4/3] flex items-center justify-center"><span class="text-2xl font-bold neon-text oswald" id="p-o3">--</span></div>
@@ -146,15 +141,13 @@
                     <div class="neon-box w-full aspect-[4/3] flex items-center justify-center"><span class="text-2xl font-bold neon-text oswald" id="p-no2">--</span></div>
                 </div>
                 
-                <!-- HEAT INDEX Box (ขยายตัวเลขให้สมส่วน) -->
                 <div class="col-span-1 row-span-2 flex flex-col items-center h-full">
                     <span class="text-[11px] font-normal mb-1 text-gray-400 uppercase tracking-wider whitespace-nowrap">HEAT INDEX</span>
                     <div class="neon-box w-full flex-grow flex flex-col justify-between py-3 px-2">
                         <div class="flex justify-between items-start w-full mt-1">
                             <div class="flex flex-col">
                                 <div class="flex items-baseline">
-                                    <!-- เพิ่มขนาดฟอนต์เป็น 4rem -->
-                                    <span class="text-[4rem] font-bold neon-text oswald leading-none tracking-tighter" id="p-heat-avg">--</span>
+                                    <span class="text-[4rem] font-bold neon-text oswald leading-none tracking-tighter" id="p-heat-avg" style="font-size: 4rem !important;">--</span>
                                     <span class="neon-text text-sm font-bold oswald ml-0.5">°C</span>
                                 </div>
                                 <span class="text-[10px] font-bold text-white block mt-0.5 tracking-wider">AVG.</span>
@@ -182,7 +175,6 @@
             </div>
         </div>
 
-        <!-- ================= TAB 2: พยากรณ์ ================= -->
         <div id="tab-forecast" class="tab-content px-5 pb-5 custom-scroll">
             <div class="flex justify-between items-end mb-6 pb-4 border-b border-gray-900">
                 <div>
@@ -197,7 +189,6 @@
                 </div>
             </div>
 
-            <!-- RAIN FORECAST -->
             <div class="mb-6">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex flex-col text-left w-1/4 leading-tight">
@@ -237,7 +228,6 @@
                 </div>
             </div>
 
-            <!-- HEAT FORECAST -->
             <div class="mb-4 pt-6 border-t border-gray-900">
                 <div class="flex justify-between items-end mb-4">
                     <div class="flex items-baseline w-[40%]">
@@ -265,7 +255,6 @@
             </div>
         </div>
 
-        <!-- ================= TAB 3 & 4: LISTS ================= -->
         <div id="tab-rain-list" class="tab-content px-5 pb-5">
             <h2 class="text-2xl font-black text-white oswald mb-3 border-b border-gray-900 pb-1 tracking-widest">RAIN BY DISTRICT</h2>
             <div id="district-list" class="flex-grow overflow-y-auto list-scroll pr-2"></div>
@@ -308,7 +297,7 @@
             {name: "ดุสิต", lat: 13.78, lon: 100.52}, {name: "บางซื่อ", lat: 13.82, lon: 100.52}, {name: "จตุจักร", lat: 13.82, lon: 100.56}, {name: "ห้วยขวาง", lat: 13.78, lon: 100.58}, {name: "ดินแดง", lat: 13.76, lon: 100.56},
             {name: "บางกะปิ", lat: 13.76, lon: 100.64}, {name: "บึงกุ่ม", lat: 13.78, lon: 100.66}, {name: "ลาดพร้าว", lat: 13.80, lon: 100.60}, {name: "วังทองหลาง", lat: 13.78, lon: 100.60}, {name: "สวนหลวง", lat: 13.73, lon: 100.63},
             {name: "ประเวศ", lat: 13.71, lon: 100.67}, {name: "พระโขนง", lat: 13.70, lon: 100.60}, {name: "บางนา", lat: 13.67, lon: 100.61}, {name: "ทวีวัฒนา", lat: 13.78, lon: 100.34}, {name: "หนองแขม", lat: 13.70, lon: 100.35},
-            {name: "บางแค", lat: 13.71, lon: 100.39}, {name: "ภาษีเจริญ", lat: 13.72, lon: 100.43}, {name: "ตลิ่งชัน", lat: 13.77, lon: 100.43}, {name: "บางพลัด", lat: 13.79, lon: 100.49}, {name: "บางกอกน้อย", lat: 13.76, lon: 100.47},
+            {name: "บางแค", lat: 13.71, lon: 100.39}, {name: "ภาษีเจริญ", lat: 13.72, lon: 100.43}, {name: "ตลิ่งชัน", lat: 13.77, lon: 100.43}, {name: "บางพลัด", lat: 13.79, lon: 100.49}, {name: "บางกokน้อย", lat: 13.76, lon: 100.47},
             {name: "บางกอกใหญ่", lat: 13.72, lon: 100.48}, {name: "คลองสาน", lat: 13.73, lon: 100.50}, {name: "ธนบุรี", lat: 13.72, lon: 100.49}, {name: "จอมทอง", lat: 13.69, lon: 100.46}, {name: "ราษฎร์บูรณะ", lat: 13.68, lon: 100.50},
             {name: "ทุ่งครุ", lat: 13.63, lon: 100.49}, {name: "บางขุนเทียน", lat: 13.61, lon: 100.43}, {name: "บางบอน", lat: 13.65, lon: 100.39}, {name: "สายไหม", lat: 13.91, lon: 100.64}, {name: "ดอนเมือง", lat: 13.91, lon: 100.59},
             {name: "หลักสี่", lat: 13.88, lon: 100.57}, {name: "บางเขน", lat: 13.86, lon: 100.60}, {name: "คลองสามวา", lat: 13.87, lon: 100.72}, {name: "มีนบุรี", lat: 13.81, lon: 100.74}, {name: "หนองจอก", lat: 13.85, lon: 100.86},
@@ -380,7 +369,9 @@
             document.getElementById('p-pressure').innerText = centerCur.surface_pressure.toFixed(0);
             
             let baseAqi = aq.european_aqi || 0;
-            document.getElementById('p-aqi').innerText = baseAqi || "--";
+            
+            // ล็อคขนาดฟอนต์ชุดใหญ่แบบ inline ป้องกันข้อมูลทับสไตล์ Tailwind
+            document.getElementById('p-aqi').innerHTML = `<span style="font-size:4.5rem !important; font-weight:900; line-height:1;">${baseAqi || '--'}</span>`;
             document.getElementById('aqi-min').innerText = baseAqi ? Math.max(0, baseAqi - 12) : "--";
             document.getElementById('aqi-max').innerText = baseAqi ? baseAqi + 15 : "--";
 
@@ -391,7 +382,9 @@
             document.getElementById('p-co').innerText = aq.carbon_monoxide != null ? aq.carbon_monoxide.toFixed(0) : "--";
             document.getElementById('p-so2').innerText = aq.sulphur_dioxide != null ? Math.round(aq.sulphur_dioxide) : "--";
 
-            document.getElementById('p-heat-avg').innerText = Math.round(sumHeat / 50);
+            let displayHeatAvg = Math.round(sumHeat / 50);
+            document.getElementById('p-heat-avg').innerHTML = `<span style="font-size:4rem !important; font-weight:900; line-height:1;">${displayHeatAvg}</span>`;
+            
             document.getElementById('p-temp').innerText = Math.round(centerCur.temperature_2m);
             document.getElementById('p-rh').innerText = Math.round(centerCur.relative_humidity_2m);
             document.getElementById('heat-min').innerText = minHeat.val.toFixed(0) + "°";
