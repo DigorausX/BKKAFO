@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MR. URBAN AI - ECO CYBERPUNK</title>
+    <title>MR. URBAN AI - ECO CYBERPUNK v2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
@@ -40,11 +40,12 @@
             } 
         }
 
-        /* ธีมสีใหม่: ตัวเลขเขียว (Neon Green) ไฮไลต์ส้มอิฐ (Bio Amber) */
+        /* ธีมสีแยกหมวดหมู่ */
         .eco-neon { color: #00ff66; text-shadow: 0 0 10px rgba(0, 255, 102, 0.8), 0 0 20px rgba(0, 255, 102, 0.4); }
-        .bio-amber { color: #ffaa00; text-shadow: 0 0 10px rgba(255, 170, 0, 0.8); }
+        .bio-amber { color: #ffaa00; text-shadow: 0 0 10px rgba(255, 170, 0, 0.8), 0 0 20px rgba(255, 170, 0, 0.4); }
+        .neon-cyan { color: #00ffff; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.4); }
         
-        /* กล่องขอบเขียว */
+        /* กล่องหลัก */
         .eco-box { 
             border: 1px solid rgba(0, 255, 102, 0.4); 
             border-radius: 8px; 
@@ -53,7 +54,6 @@
             transition: all 0.3s ease;
         }
 
-        /* ไฟกระพริบเบาๆ รักษ์โลก */
         @keyframes boxPulse {
             0%, 100% { border-color: rgba(0, 255, 102, 0.4); box-shadow: inset 0 0 15px rgba(0, 255, 102, 0.1); }
             50% { border-color: #00ff66; box-shadow: 0 0 10px rgba(0, 255, 102, 0.2), inset 0 0 25px rgba(0, 255, 102, 0.15); }
@@ -62,17 +62,22 @@
 
         .glitch-text { text-shadow: 2px 0 0 #00ff66, -2px 0 0 #ffaa00; color: #ffffff; }
 
-        .nav-link { cursor: pointer; transition: all 0.3s; white-space: nowrap; color: #475569; padding-bottom: 4px; font-weight: 700; }
-        .nav-link.active { color: #00ff66; border-bottom: 2px solid #00ff66; text-shadow: 0 0 8px rgba(0,255,102,0.6); }
+        /* เมนู Navigation */
+        .nav-link { cursor: pointer; transition: all 0.3s; white-space: nowrap; color: #475569; padding-bottom: 4px; font-weight: 700; border-bottom: 2px solid transparent; }
         
         .tab-content { display: none; height: 100%; flex-direction: column; overflow-y: auto; }
         .tab-content.active { display: flex; animation: fadeIn 0.2s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+        /* Scrollbars แยกสีตามแท็บ */
         .custom-scroll::-webkit-scrollbar { width: 4px; height: 0px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #00ff66; border-radius: 10px; }
-        .list-scroll::-webkit-scrollbar { width: 4px; }
-        .list-scroll::-webkit-scrollbar-thumb { background: #ffaa00; border-radius: 10px; }
+        
+        .list-scroll-cyan::-webkit-scrollbar { width: 4px; }
+        .list-scroll-cyan::-webkit-scrollbar-thumb { background: #00ffff; border-radius: 10px; }
+        
+        .list-scroll-orange::-webkit-scrollbar { width: 4px; }
+        .list-scroll-orange::-webkit-scrollbar-thumb { background: #ffaa00; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -83,17 +88,17 @@
         <div id="loading" class="absolute inset-0 bg-[#020804] z-50 flex flex-col justify-center items-center">
             <div id="loading-spinner" class="w-12 h-10 flex justify-between gap-1">
                 <div class="w-2 bg-[#00ff66] h-full animate-bounce"></div>
-                <div class="w-2 bg-[#00ff66] h-full animate-bounce [animation-delay:0.2s]"></div>
-                <div class="w-2 bg-[#00ff66] h-full animate-bounce [animation-delay:0.4s]"></div>
+                <div class="w-2 bg-[#00ffff] h-full animate-bounce [animation-delay:0.2s]"></div>
+                <div class="w-2 bg-[#ffaa00] h-full animate-bounce [animation-delay:0.4s]"></div>
             </div>
             <p id="loading-text" class="font-bold tracking-widest eco-neon text-xs mt-4 animate-pulse">CONNECTING AI SENSORS...</p>
             <p id="retry-msg" class="hidden text-green-300 text-[10px] mt-2 text-center px-4">SIGNAL LOST.<br>REBOOTING IN <span id="countdown" class="bio-amber text-sm">5</span> SECONDS...</p>
         </div>
 
-        <!-- HEADER NAVIGATION -->
+        <!-- HEADER NAVIGATION (เปลี่ยนสีได้ตามแท็บ) -->
         <div class="px-5 pt-5 flex flex-col flex-shrink-0 bg-[#040d06]/90 backdrop-blur-md z-10">
-            <div class="flex justify-between items-center mb-4 overflow-x-auto custom-scroll border-b border-green-900/50 gap-4">
-                <span class="nav-link active text-xs uppercase tracking-wider" onclick="switchTab('tab-main', this)">หน้าหลัก</span>
+            <div class="flex justify-between items-center mb-4 overflow-x-auto custom-scroll border-b border-gray-900 gap-4">
+                <span class="nav-link active text-xs uppercase tracking-wider" style="color: #00ff66; border-color: #00ff66; text-shadow: 0 0 8px rgba(0,255,102,0.6);" onclick="switchTab('tab-main', this)">หน้าหลัก</span>
                 <span class="nav-link text-xs uppercase tracking-wider" onclick="switchTab('tab-forecast', this)">พยากรณ์</span>
                 <span class="nav-link text-xs uppercase tracking-wider" onclick="switchTab('tab-rain-list', this)">ฝนรายเขต</span>
                 <span class="nav-link text-xs uppercase tracking-wider" onclick="switchTab('tab-heat-list', this)">ความร้อน</span>
@@ -115,7 +120,6 @@
                 </div>
             </div>
             
-            <!-- TOP METRICS -->
             <div class="flex justify-between items-start mb-6 mt-2">
                 <div class="flex items-baseline pt-1">
                     <span class="text-lg font-normal mr-3 text-white">ฝนตก</span>
@@ -144,7 +148,6 @@
                 </div>
             </div>
 
-            <!-- GRID DATA -->
             <div class="grid grid-cols-3 gap-x-3 gap-y-4 flex-grow content-end pb-2">
                 
                 <div class="flex flex-col items-center">
@@ -304,25 +307,38 @@
             </div>
         </div>
 
-        <!-- ================= TAB 3 & 4 ================= -->
+        <!-- ================= TAB 3: ฝนรายเขต (ฟ้า) ================= -->
         <div id="tab-rain-list" class="tab-content px-5 pb-5">
-            <h2 class="text-2xl font-black eco-neon oswald mb-3 border-b border-green-900/50 pb-1 tracking-widest">RAIN BY DISTRICT</h2>
-            <div id="district-list" class="flex-grow overflow-y-auto list-scroll pr-2"></div>
+            <h2 class="text-2xl font-black neon-cyan oswald mb-3 border-b border-[#00ffff]/30 pb-1 tracking-widest">RAIN BY DISTRICT</h2>
+            <div id="district-list" class="flex-grow overflow-y-auto list-scroll-cyan pr-2"></div>
         </div>
 
+        <!-- ================= TAB 4: ความร้อน (ส้ม) ================= -->
         <div id="tab-heat-list" class="tab-content px-5 pb-5">
-            <h2 class="text-2xl font-black bio-amber oswald mb-3 border-b border-green-900/50 pb-1 tracking-widest">HEAT BY DISTRICT</h2>
-            <div id="heat-list" class="flex-grow overflow-y-auto list-scroll pr-2"></div>
+            <h2 class="text-2xl font-black bio-amber oswald mb-3 border-b border-[#ffaa00]/30 pb-1 tracking-widest">HEAT BY DISTRICT</h2>
+            <div id="heat-list" class="flex-grow overflow-y-auto list-scroll-orange pr-2"></div>
         </div>
 
     </div>
 
     <script>
+        // ระบบสลับแท็บพร้อมเปลี่ยนสีเส้นใต้เมนูให้อัตโนมัติ
         function switchTab(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                link.style = ""; 
+            });
             document.getElementById(tabId).classList.add('active');
             element.classList.add('active');
+
+            if(tabId === 'tab-rain-list') {
+                element.style.color = '#00ffff'; element.style.borderColor = '#00ffff'; element.style.textShadow = '0 0 8px rgba(0,255,255,0.6)';
+            } else if(tabId === 'tab-heat-list') {
+                element.style.color = '#ffaa00'; element.style.borderColor = '#ffaa00'; element.style.textShadow = '0 0 8px rgba(255,170,0,0.6)';
+            } else {
+                element.style.color = '#00ff66'; element.style.borderColor = '#00ff66'; element.style.textShadow = '0 0 8px rgba(0,255,102,0.6)';
+            }
         }
 
         setInterval(() => {
@@ -419,8 +435,6 @@
             document.getElementById('p-pressure').innerText = centerCur.surface_pressure.toFixed(0);
             
             let baseAqi = aq.european_aqi || 0;
-            
-            // ล็อคคลาสสีตัวเลขเป็น eco-neon เหมือนกันทั้งหมด
             document.getElementById('p-aqi').innerHTML = `<span class="eco-neon tracking-tighter" style="font-size:4.5rem !important; font-weight:900; font-family:'Oswald', sans-serif;">${baseAqi || '--'}</span>`;
             document.getElementById('aqi-min').innerText = baseAqi ? Math.max(0, baseAqi - 12) : "--";
             document.getElementById('aqi-max').innerText = baseAqi ? baseAqi + 15 : "--";
@@ -433,7 +447,6 @@
             document.getElementById('p-so2').innerText = aq.sulphur_dioxide != null ? Math.round(aq.sulphur_dioxide) : "--";
 
             let displayHeatAvg = Math.round(sumHeat / 50);
-            // ล็อคคลาสสีตัวเลขเป็น eco-neon เหมือนกันทั้งหมด
             document.getElementById('p-heat-avg').innerHTML = `<span class="eco-neon tracking-tighter" style="font-size:4rem !important; font-weight:900; font-family:'Oswald', sans-serif;">${displayHeatAvg}</span><span class="eco-neon text-lg font-bold oswald ml-0.5">°C</span>`;
             
             document.getElementById('p-temp').innerText = Math.round(centerCur.temperature_2m) + "°";
@@ -535,31 +548,33 @@
                 };
             });
 
+            // หมวดฝน (ฟ้า-Cyan)
             let rainSorted = [...baseArr].sort((a, b) => b.rain - a.rain || b.wind - a.wind);
             rainSorted.forEach((site, index) => {
                 let statusRain = site.rain > 0 ? "100" : "0";
                 rainContainer.innerHTML += `
-                <div class="flex justify-between items-center py-2.5 border-b border-green-900/30 text-[10px]">
+                <div class="flex justify-between items-center py-2.5 border-b border-[#00ffff]/20 text-[10px]">
                     <div class="w-2/5"><span class="text-white font-bold block truncate tracking-wide">NO.${String(index+1).padStart(2, '0')} เขต${site.name.replace('เขต', '')}</span></div>
                     <div class="flex justify-between w-3/5 text-center px-1">
-                        <div><p class="text-green-500 text-[7px] mb-[-3px] font-normal">ฝนตก</p><span class="eco-neon font-bold text-xs">${statusRain}%</span></div>
-                        <div><p class="text-green-500 text-[7px] mb-[-3px] font-normal">ปริมาณฝน</p><span class="eco-neon font-bold text-xs">${site.rain.toFixed(1)}</span></div>
-                        <div><p class="text-green-500 text-[7px] mb-[-3px] font-normal">ความเร็วลม</p><span class="eco-neon font-bold text-xs">${site.wind.toFixed(0)}</span></div>
-                        <div><p class="text-green-500 text-[7px] mb-[-3px] font-normal">ทิศทาง</p><span class="eco-neon font-bold text-xs">${site.dir}</span></div>
+                        <div><p class="text-cyan-400 text-[7px] mb-[-3px] font-normal">ฝนตก</p><span class="neon-cyan font-bold text-xs">${statusRain}%</span></div>
+                        <div><p class="text-cyan-400 text-[7px] mb-[-3px] font-normal">ปริมาณฝน</p><span class="neon-cyan font-bold text-xs">${site.rain.toFixed(1)}</span></div>
+                        <div><p class="text-cyan-400 text-[7px] mb-[-3px] font-normal">ความเร็วลม</p><span class="neon-cyan font-bold text-xs">${site.wind.toFixed(0)}</span></div>
+                        <div><p class="text-cyan-400 text-[7px] mb-[-3px] font-normal">ทิศทาง</p><span class="neon-cyan font-bold text-xs">${site.dir}</span></div>
                     </div>
                 </div>`;
             });
 
+            // หมวดความร้อน (ส้ม-Amber)
             let heatSorted = [...baseArr].sort((a, b) => b.heat - a.heat);
             heatSorted.forEach((site, index) => {
                 heatContainer.innerHTML += `
-                <div class="flex justify-between items-center py-2.5 border-b border-green-900/30 text-[10px]">
+                <div class="flex justify-between items-center py-2.5 border-b border-[#ffaa00]/20 text-[10px]">
                     <div class="w-2/5"><span class="text-white font-bold block truncate tracking-wide">NO.${String(index+1).padStart(2, '0')} เขต${site.name.replace('เขต', '')}</span></div>
                     <div class="flex justify-between w-3/5 text-center px-1">
-                        <div><p class="text-green-500 text-[7px] mb-[-3px] font-normal">HEAT INDEX</p><span class="eco-neon font-bold text-xs">${site.heat.toFixed(0)}°C</span></div>
-                        <div><p class="text-green-500 text-[7px] mb-[-3px] font-normal">TEMP</p><span class="eco-neon font-bold text-xs">${site.temp.toFixed(0)}°C</span></div>
-                        <div><p class="text-green-500 text-[7px] mb-[-3px] font-normal">RH</p><span class="eco-neon font-bold text-xs">${site.rh.toFixed(0)}%</span></div>
-                        <div><p class="text-green-500 text-[7px] mb-[-3px] font-normal">WIND</p><span class="eco-neon font-bold text-xs">${site.wind.toFixed(0)}</span></div>
+                        <div><p class="text-orange-400 text-[7px] mb-[-3px] font-normal">HEAT INDEX</p><span class="bio-amber font-bold text-xs">${site.heat.toFixed(0)}°C</span></div>
+                        <div><p class="text-orange-400 text-[7px] mb-[-3px] font-normal">TEMP</p><span class="bio-amber font-bold text-xs">${site.temp.toFixed(0)}°C</span></div>
+                        <div><p class="text-orange-400 text-[7px] mb-[-3px] font-normal">RH</p><span class="bio-amber font-bold text-xs">${site.rh.toFixed(0)}%</span></div>
+                        <div><p class="text-orange-400 text-[7px] mb-[-3px] font-normal">WIND</p><span class="bio-amber font-bold text-xs">${site.wind.toFixed(0)}</span></div>
                     </div>
                 </div>`;
             });
