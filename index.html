@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MR. URBAN AI - 7-DAY FORECAST SYSTEM</title>
+    <title>MR. URBAN AI - ECO CYBERPUNK 24H</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
@@ -99,7 +99,7 @@
         <div class="px-5 pt-5 flex flex-col flex-shrink-0 bg-[#040d06]/90 backdrop-blur-md z-10">
             <div class="flex justify-between items-center mb-4 overflow-x-auto custom-scroll border-b border-gray-900 gap-4">
                 <span class="nav-link active text-xs uppercase tracking-wider" style="color: #00ff66; border-color: #00ff66; text-shadow: 0 0 8px rgba(0,255,102,0.6);" onclick="switchTab('tab-main', this)">หน้าหลัก</span>
-                <span class="nav-link text-xs uppercase tracking-wider" onclick="switchTab('tab-forecast', this)">พยากรณ์ 7 วัน</span>
+                <span class="nav-link text-xs uppercase tracking-wider" onclick="switchTab('tab-forecast', this)">พยากรณ์</span>
                 <span class="nav-link text-xs uppercase tracking-wider" onclick="switchTab('tab-rain-list', this)">ฝนรายเขต</span>
                 <span class="nav-link text-xs uppercase tracking-wider" onclick="switchTab('tab-heat-list', this)">ความร้อน</span>
             </div>
@@ -220,14 +220,14 @@
             </div>
         </div>
 
-        <!-- ================= TAB 2: พยากรณ์ 7 วัน (แบ่งสี ฝนฟ้า / ร้อนส้ม) ================= -->
+        <!-- ================= TAB 2: พยากรณ์ 24 ชม. (แบ่งสี ฝนฟ้า / ร้อนส้ม) ================= -->
         <div id="tab-forecast" class="tab-content px-5 pb-5 custom-scroll">
             <div class="flex justify-between items-end mb-6 pb-4 border-b border-green-900/50">
                 <div>
                     <h2 class="text-[9px] font-bold tracking-widest mb-0.5 text-green-500">MR. URBAN AI SYSTEM</h2>
                     <h1 class="text-3xl font-black uppercase oswald tracking-tight leading-none text-white">BANGKOK</h1>
                     <h1 class="text-3xl font-black uppercase oswald tracking-wide leading-none text-white">FORECAST</h1>
-                    <h2 class="text-[14px] font-bold uppercase oswald mt-1 glitch-text tracking-widest">NEXT 7 DAYS</h2>
+                    <h2 class="text-[14px] font-bold uppercase oswald mt-1 glitch-text sys-forecast-date tracking-widest">IN --</h2>
                 </div>
                 <div class="text-right flex flex-col justify-end">
                     <h2 class="text-4xl font-bold eco-neon oswald tracking-wide leading-none sys-time">00:00</h2>
@@ -240,14 +240,14 @@
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex flex-col text-left w-1/4 leading-tight">
                         <span class="text-[11px] font-normal text-cyan-400">โอกาส</span>
-                        <span class="text-[14px] font-bold text-white tracking-wide mt-0.5">เกิดฝนตก<br>สูงสุด <span class="text-[10px] text-cyan-200">(7 วัน)</span></span>
+                        <span class="text-[14px] font-bold text-white tracking-wide mt-0.5">เกิดฝนตก<br>สูงสุด</span>
                     </div>
                     <div class="flex items-baseline justify-center w-2/4">
                         <span class="text-[5.5rem] font-bold neon-cyan oswald leading-none tracking-tighter" id="fc-rain-prob">0</span>
                         <span class="text-3xl font-bold text-white oswald ml-1">%</span>
                     </div>
                     <div class="flex flex-col text-right w-1/4 leading-tight">
-                        <span class="text-[9px] font-normal text-white">เวลา <span class="neon-cyan text-[10px] font-bold" id="fc-rain-time">--</span></span>
+                        <span class="text-[9px] font-normal text-white">เวลา <span class="neon-cyan text-[12px] font-bold" id="fc-rain-time">00:00</span></span>
                         <span class="text-[13px] font-bold text-white mt-1" id="fc-rain-dist">เขต...</span>
                     </div>
                 </div>
@@ -269,9 +269,9 @@
                     </div>
                 </div>
 
-                <!-- กล่องกราฟฝน 7 วัน (ขอบฟ้า) -->
+                <!-- กล่องกราฟฝน (ขอบฟ้า) -->
                 <div class="w-full p-2 pt-4 h-[150px] relative mt-4 border border-cyan-500/40 rounded-lg bg-cyan-500/5 shadow-[inset_0_0_15px_rgba(0,255,255,0.1)]">
-                    <span class="text-[8px] font-bold text-cyan-400 absolute top-2 left-3 z-10">กราฟแนวโน้มโอกาสเกิดฝน 7 วัน</span>
+                    <span class="text-[8px] font-bold text-cyan-400 absolute top-2 left-3 z-10">กราฟพยากรณ์โอกาสการเกิดฝน 24 ชม.</span>
                     <canvas id="chart-fc-rain"></canvas>
                 </div>
             </div>
@@ -284,9 +284,8 @@
                         <span class="text-3xl font-bold bio-amber oswald ml-1 mb-2">°C</span>
                     </div>
                     <div class="text-right flex flex-col justify-end w-[60%] leading-tight pb-2">
-                        <span class="text-[16px] font-bold text-white tracking-wide">ดัชนีความร้อน<span class="text-[24px] bio-amber ml-1">สูงสุด <span class="text-[12px]">(7 วัน)</span></span></span>
-                        <span class="text-[18px] font-bold text-white mt-1" id="fc-heat-dist">เขต...</span>
-                        <span class="text-[10px] font-bold bio-amber mt-0.5" id="fc-heat-time">--</span>
+                        <span class="text-[16px] font-bold text-white tracking-wide">ดัชนีความร้อน<span class="text-[24px] bio-amber ml-1">สูงสุด</span></span>
+                        <span class="text-[20px] font-bold text-white mt-1" id="fc-heat-dist">เขต...</span>
                     </div>
                 </div>
                 
@@ -298,9 +297,9 @@
                     <div class="flex flex-col justify-end"><span class="text-[8px] font-normal text-orange-400 leading-tight mb-0.5">ความชื้น<br>สัมพัทธ์</span><span class="text-[17px] font-bold bio-amber oswald leading-none" id="fc-heat-rh">0%</span></div>
                 </div>
 
-                <!-- กล่องกราฟความร้อน 7 วัน (ขอบส้ม) -->
+                <!-- กล่องกราฟความร้อน (ขอบส้ม) -->
                 <div class="w-full p-2 pt-4 h-[150px] relative mt-4 border border-orange-500/40 rounded-lg bg-orange-500/5 shadow-[inset_0_0_15px_rgba(255,170,0,0.1)]">
-                    <span class="text-[8px] font-bold text-orange-400 absolute top-2 left-3 z-10">กราฟแนวโน้มดัชนีความร้อน 7 วัน</span>
+                    <span class="text-[8px] font-bold text-orange-400 absolute top-2 left-3 z-10">กราฟพยากรณ์ดัชนีความร้อนเฉลี่ย 24 ชม.</span>
                     <canvas id="chart-fc-heat"></canvas>
                 </div>
             </div>
@@ -344,6 +343,7 @@
             document.querySelectorAll('.sys-time').forEach(el => el.innerText = now.toLocaleTimeString('en-US', {hour12: false, hour: '2-digit', minute: '2-digit'}));
             let dateStr = now.toLocaleDateString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'});
             document.querySelectorAll('.sys-date').forEach(el => el.innerText = dateStr);
+            document.querySelectorAll('.sys-forecast-date').forEach(el => el.innerText = "IN " + dateStr);
         }, 1000);
 
         function getWindDir(deg) {
@@ -375,8 +375,8 @@
                 const lats = bkkDistricts.map(d => d.lat).join(',');
                 const lons = bkkDistricts.map(d => d.lon).join(',');
                 
-                // อัปเดต API Request เป็น 7 วัน (forecast_days=7)
-                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=precipitation,wind_speed_10m,wind_direction_10m,surface_pressure,temperature_2m,relative_humidity_2m,apparent_temperature,dew_point_2m&hourly=precipitation_probability,apparent_temperature,precipitation,wind_speed_10m,wind_direction_10m,dew_point_2m,temperature_2m,relative_humidity_2m&forecast_days=7&timezone=Asia/Bangkok`;
+                // ใช้ forecast_hours=24 สำหรับการพยากรณ์ 1 วันตามเดิม
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=precipitation,wind_speed_10m,wind_direction_10m,surface_pressure,temperature_2m,relative_humidity_2m,apparent_temperature,dew_point_2m&hourly=precipitation_probability,apparent_temperature,precipitation,wind_speed_10m,wind_direction_10m,dew_point_2m,temperature_2m,relative_humidity_2m&forecast_hours=24&timezone=Asia/Bangkok`;
                 const res = await fetch(url);
                 if (!res.ok) throw new Error("API Limit");
                 const data = await res.json();
@@ -459,17 +459,15 @@
             let maxP = { val: -1, time: "", dist: "", rain: 0, wind: 0, dir: 0, dew: 0, temp: 0, rh: 0 };
             let maxH = { val: -99, time: "", dist: "", wind: 0, dir: 0, dew: 0, temp: 0, rh: 0 };
 
-            // หาค่าสูงสุดในรอบ 7 วัน (168 ชม.)
+            // คำนวณเฉพาะ 24 ชั่วโมงล่วงหน้าเหมือนเดิม
             apiData.forEach((site, index) => {
-                for(let h=0; h < site.hourly.time.length; h++) {
+                for(let h=0; h<24; h++) {
                     let p = site.hourly.precipitation_probability[h];
                     let ht = site.hourly.apparent_temperature[h];
                     
                     if(p > maxP.val) {
                         maxP.val = p;
-                        let dt = new Date(site.hourly.time[h]);
-                        // จัด Format เป็น 16 ก.ค. 14:00
-                        maxP.time = dt.toLocaleDateString('th-TH', {day:'numeric', month:'short'}) + " " + dt.toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'});
+                        maxP.time = new Date(site.hourly.time[h]).toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'});
                         maxP.dist = bkkDistricts[index].name;
                         maxP.rain = site.hourly.precipitation[h];
                         maxP.wind = site.hourly.wind_speed_10m[h];
@@ -480,8 +478,7 @@
                     }
                     if(ht > maxH.val) {
                         maxH.val = ht;
-                        let dt = new Date(site.hourly.time[h]);
-                        maxH.time = dt.toLocaleDateString('th-TH', {day:'numeric', month:'short'}) + " " + dt.toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'});
+                        maxH.time = new Date(site.hourly.time[h]).toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'});
                         maxH.dist = bkkDistricts[index].name;
                         maxH.wind = site.hourly.wind_speed_10m[h];
                         maxH.dir = site.hourly.wind_direction_10m[h];
@@ -503,7 +500,8 @@
             document.getElementById('fc-rain-rh').innerText = Math.round(maxP.rh) + "%";
 
             document.getElementById('fc-heat-val').innerText = maxH.val.toFixed(0);
-            document.getElementById('fc-heat-time').innerText = maxH.time;
+            // ให้หน้าตาโครงสร้าง HTML หน้าความร้อนกลับมาเหมือนหน้าฝนเป๊ะ
+            // เอาแท็ก id="fc-heat-time" ออกไปแล้ว และใช้โครงสร้างเดิมเพื่อไม่ให้เลย์เอาต์เบียด
             document.getElementById('fc-heat-dist').innerText = "เขต" + maxH.dist.replace('เขต', '');
             document.getElementById('fc-heat-wind').innerText = maxH.wind.toFixed(0);
             document.getElementById('fc-heat-dir').innerText = getWindDir(maxH.dir);
@@ -511,26 +509,9 @@
             document.getElementById('fc-heat-temp').innerText = Math.round(maxH.temp) + "°C";
             document.getElementById('fc-heat-rh').innerText = Math.round(maxH.rh) + "%";
 
-            // สกัดข้อมูลสำหรับกราฟรายวัน (7 วัน)
+            // ข้อมูลกราฟ 24 ชม.
             let centerHourly = apiData[0].hourly;
-            let dailyLabels = [];
-            let dailyRainProb = [];
-            let dailyHeatMax = [];
-            
-            let numDays = Math.floor(centerHourly.time.length / 24);
-            for(let i=0; i<numDays; i++) {
-                let start = i * 24;
-                let end = start + 24;
-                
-                let d = new Date(centerHourly.time[start]);
-                dailyLabels.push(d.toLocaleDateString('th-TH', {weekday: 'short', day: 'numeric'}));
-                
-                let dayRain = centerHourly.precipitation_probability.slice(start, end);
-                dailyRainProb.push(Math.max(...dayRain));
-                
-                let dayHeat = centerHourly.apparent_temperature.slice(start, end);
-                dailyHeatMax.push(Math.max(...dayHeat));
-            }
+            let times = centerHourly.time.map(t => new Date(t).toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'}));
             
             if(cRain) cRain.destroy();
             if(cHeat) cHeat.destroy();
@@ -543,13 +524,13 @@
             };
 
             cRain = new Chart(document.getElementById('chart-fc-rain').getContext('2d'), {
-                type: 'line', data: { labels: dailyLabels, datasets: [{ data: dailyRainProb, borderColor: '#00ffff', backgroundColor: 'rgba(0,255,255,0.05)', borderWidth: 2, fill: true }] },
-                options: { ...baseOpts, scales: { x: { grid: { color: 'rgba(0,255,255,0.1)' }, ticks: { color: '#64748b', font: { size: 10 } } }, y: { min: 0, max: 100, grid: { color: 'rgba(0,255,255,0.1)' }, ticks: { color: '#64748b', font: { size: 8 }, stepSize: 25 } } } }
+                type: 'line', data: { labels: times, datasets: [{ data: centerHourly.precipitation_probability, borderColor: '#00ffff', backgroundColor: 'rgba(0,255,255,0.05)', borderWidth: 2, fill: true }] },
+                options: { ...baseOpts, scales: { x: { grid: { color: 'rgba(0,255,255,0.1)' }, ticks: { color: '#64748b', font: { size: 8 }, maxRotation: 45, minRotation: 45, maxTicksLimit: 12 } }, y: { min: 0, max: 100, grid: { color: 'rgba(0,255,255,0.1)' }, ticks: { color: '#64748b', font: { size: 8 }, stepSize: 20 } } } }
             });
 
             cHeat = new Chart(document.getElementById('chart-fc-heat').getContext('2d'), {
-                type: 'line', data: { labels: dailyLabels, datasets: [{ data: dailyHeatMax, borderColor: '#ffaa00', backgroundColor: 'rgba(255,170,0,0.05)', borderWidth: 2, fill: true }] },
-                options: { ...baseOpts, scales: { x: { grid: { color: 'rgba(255,170,0,0.1)' }, ticks: { color: '#64748b', font: { size: 10 } } }, y: { grid: { color: 'rgba(255,170,0,0.1)' }, ticks: { color: '#64748b', font: { size: 8 } } } } }
+                type: 'line', data: { labels: times, datasets: [{ data: centerHourly.apparent_temperature, borderColor: '#ffaa00', backgroundColor: 'rgba(255,170,0,0.05)', borderWidth: 2, fill: true }] },
+                options: { ...baseOpts, scales: { x: { grid: { color: 'rgba(255,170,0,0.1)' }, ticks: { color: '#64748b', font: { size: 8 }, maxRotation: 45, minRotation: 45, maxTicksLimit: 12 } }, y: { grid: { color: 'rgba(255,170,0,0.1)' }, ticks: { color: '#64748b', font: { size: 8 } } } } }
             });
         }
 
@@ -570,6 +551,7 @@
                 };
             });
 
+            // หมวดฝน (ฟ้า-Cyan)
             let rainSorted = [...baseArr].sort((a, b) => b.rain - a.rain || b.wind - a.wind);
             rainSorted.forEach((site, index) => {
                 let statusRain = site.rain > 0 ? "100" : "0";
@@ -585,6 +567,7 @@
                 </div>`;
             });
 
+            // หมวดความร้อน (ส้ม-Amber)
             let heatSorted = [...baseArr].sort((a, b) => b.heat - a.heat);
             heatSorted.forEach((site, index) => {
                 heatContainer.innerHTML += `
