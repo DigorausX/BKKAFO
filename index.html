@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BKK AIR FORCE ONE - TACTICAL NEON v3</title>
+    <title>BKK AIR FORCE ONE - TACTICAL NEON v4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
@@ -47,6 +47,7 @@
             <p id="retry-msg" class="hidden text-gray-500 text-[10px] mt-2 text-center px-4">API Rate Limit Hit.<br>Auto-retrying in <span id="countdown">5</span> seconds...</p>
         </div>
 
+        <!-- HEADER NAVIGATION (FIXED) -->
         <div class="px-5 pt-5 flex flex-col flex-shrink-0 bg-black z-10">
             <div class="flex justify-between items-center mb-4 overflow-x-auto custom-scroll border-b border-gray-900 gap-3">
                 <span class="nav-link active text-[10px] uppercase tracking-wider" onclick="switchTab('tab-main', this)">หน้าหลัก</span>
@@ -56,6 +57,7 @@
             </div>
         </div>
 
+        <!-- ================= TAB 1: หน้าหลัก (REAL-TIME) ================= -->
         <div id="tab-main" class="tab-content active px-5 pb-5 custom-scroll">
             <div class="flex justify-between items-end mb-4 pb-4 border-b border-gray-900">
                 <div>
@@ -97,6 +99,7 @@
                 </div>
             </div>
 
+            <!-- GRID (AQI / HEAT) -->
             <div class="grid grid-cols-3 gap-x-3 gap-y-3">
                 <div class="flex flex-col items-center">
                     <span class="text-[9px] font-normal mb-0.5 text-gray-400 uppercase tracking-wider">จุดน้ำค้าง</span>
@@ -165,6 +168,7 @@
             </div>
         </div>
 
+        <!-- ================= TAB 2: พยากรณ์ (FORECAST) ================= -->
         <div id="tab-forecast" class="tab-content px-5 pb-5 custom-scroll">
             
             <div class="flex justify-between items-end mb-6 pb-4 border-b border-gray-900">
@@ -180,7 +184,9 @@
                 </div>
             </div>
 
-            <div class="mb-6">
+            <!-- SECTION: RAIN FORECAST -->
+            <div class="mb-8">
+                <!-- Top Row: Prob, Percentage, Time/Dist -->
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex flex-col text-left w-1/4 leading-tight">
                         <span class="text-[11px] font-normal text-white">โอกาส</span>
@@ -196,6 +202,7 @@
                     </div>
                 </div>
                 
+                <!-- Sub-metrics Grid -->
                 <div class="flex items-end justify-between mb-2">
                     <div class="flex flex-col text-left w-[25%]">
                         <span class="text-[9px] font-normal text-white mb-[-2px]">ปริมาณน้ำฝน</span>
@@ -213,13 +220,15 @@
                     </div>
                 </div>
 
-                <div class="neon-box w-full p-0 h-[110px] relative mt-4">
+                <!-- Chart (เปิดแกนเวลาแล้ว) -->
+                <div class="neon-box w-full p-2 pt-4 h-[150px] relative mt-4">
                     <span class="text-[7px] font-bold text-gray-400 absolute top-1.5 left-2 z-10">กราฟพยากรณ์โอกาสการเกิดฝน 24 ชม.</span>
                     <canvas id="chart-fc-rain"></canvas>
                 </div>
             </div>
 
-            <div class="mb-4 pt-6 border-t border-gray-900">
+            <!-- SECTION: HEAT FORECAST -->
+            <div class="mb-4 pt-4 border-t border-gray-900">
                 <div class="flex justify-between items-end mb-4">
                     <div class="flex items-baseline w-[40%]">
                         <span class="text-[5.5rem] font-bold neon-text oswald leading-none tracking-tighter" id="fc-heat-val">0</span>
@@ -239,18 +248,21 @@
                     <div class="flex flex-col justify-end"><span class="text-[8px] font-normal text-white leading-tight mb-0.5">ความชื้น<br>สัมพัทธ์</span><span class="text-[17px] font-bold neon-text oswald leading-none" id="fc-heat-rh">0%</span></div>
                 </div>
 
-                <div class="neon-box w-full p-0 h-[110px] relative mt-4">
+                <!-- Chart (เปิดแกนเวลาแล้ว) -->
+                <div class="neon-box w-full p-2 pt-4 h-[150px] relative mt-4">
                     <span class="text-[7px] font-bold text-gray-400 absolute top-1.5 left-2 z-10">กราฟพยากรณ์ดัชนีความร้อนเฉลี่ย 24 ชม.</span>
                     <canvas id="chart-fc-heat"></canvas>
                 </div>
             </div>
         </div>
 
+        <!-- ================= TAB 3: ฝนรายเขต ================= -->
         <div id="tab-rain-list" class="tab-content px-5 pb-5">
             <h2 class="text-2xl font-black text-white oswald mb-3 border-b border-gray-900 pb-1 tracking-widest">RAIN BY DISTRICT</h2>
             <div id="district-list" class="flex-grow overflow-y-auto list-scroll pr-2"></div>
         </div>
 
+        <!-- ================= TAB 4: ความร้อนรายเขต ================= -->
         <div id="tab-heat-list" class="tab-content px-5 pb-5">
             <h2 class="text-2xl font-black text-white oswald mb-3 border-b border-gray-900 pb-1 tracking-widest">HEAT BY DISTRICT</h2>
             <div id="heat-list" class="flex-grow overflow-y-auto list-scroll pr-2"></div>
@@ -436,21 +448,34 @@
             if(cRain) cRain.destroy();
             if(cHeat) cHeat.destroy();
 
-            const chartOpts = {
+            // CHART CONFIGS - ENABLE AXES (ตามแบบภาพใหม่ล่าสุด)
+            const baseOpts = {
                 responsive: true, maintainAspectRatio: false,
-                scales: { x: { display: false }, y: { display: false, min: 0 } },
                 plugins: { legend: { display: false } },
-                layout: { padding: 0 }, elements: { point: { radius: 0 }, line: { tension: 0.4 } }
+                layout: { padding: { top: 15, right: 10, bottom: 0, left: 0 } },
+                elements: { point: { radius: 0 }, line: { tension: 0.4 } }
             };
 
             cRain = new Chart(document.getElementById('chart-fc-rain').getContext('2d'), {
                 type: 'line', data: { labels: times, datasets: [{ data: centerHourly.precipitation_probability, borderColor: '#ff3300', backgroundColor: 'rgba(255,51,0,0.05)', borderWidth: 1.5, fill: true }] },
-                options: chartOpts
+                options: {
+                    ...baseOpts,
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#777', font: { size: 8 }, maxRotation: 45, minRotation: 45, maxTicksLimit: 12 } },
+                        y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#777', font: { size: 8 }, stepSize: 20 } }
+                    }
+                }
             });
 
             cHeat = new Chart(document.getElementById('chart-fc-heat').getContext('2d'), {
                 type: 'line', data: { labels: times, datasets: [{ data: centerHourly.apparent_temperature, borderColor: '#ff3300', backgroundColor: 'rgba(255,51,0,0.05)', borderWidth: 1.5, fill: true }] },
-                options: { ...chartOpts, scales: { x: { display: false }, y: { display: false } } }
+                options: {
+                    ...baseOpts,
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#777', font: { size: 8 }, maxRotation: 45, minRotation: 45, maxTicksLimit: 12 } },
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#777', font: { size: 8 } } }
+                    }
+                }
             });
         }
 
