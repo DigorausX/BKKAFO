@@ -40,12 +40,10 @@
             } 
         }
 
-        /* ธีมสีแยกหมวดหมู่ */
         .eco-neon { color: #00ff66; text-shadow: 0 0 10px rgba(0, 255, 102, 0.8), 0 0 20px rgba(0, 255, 102, 0.4); }
         .bio-amber { color: #ffaa00; text-shadow: 0 0 10px rgba(255, 170, 0, 0.8), 0 0 20px rgba(255, 170, 0, 0.4); }
         .neon-cyan { color: #00ffff; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.4); }
         
-        /* กล่องหลักรักษ์โลก (Eco-Box) */
         .eco-box { 
             border: 1px solid rgba(0, 255, 102, 0.4); 
             border-radius: 8px; 
@@ -62,14 +60,12 @@
 
         .glitch-text { text-shadow: 2px 0 0 #00ff66, -2px 0 0 #ffaa00; color: #ffffff; }
 
-        /* เมนู Navigation */
         .nav-link { cursor: pointer; transition: all 0.3s; white-space: nowrap; color: #475569; padding-bottom: 4px; font-weight: 700; border-bottom: 2px solid transparent; }
         
         .tab-content { display: none; height: 100%; flex-direction: column; overflow-y: auto; }
         .tab-content.active { display: flex; animation: fadeIn 0.2s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Scrollbars แยกสีตามแท็บ */
         .custom-scroll::-webkit-scrollbar { width: 4px; height: 0px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #00ff66; border-radius: 10px; }
         
@@ -105,7 +101,7 @@
             </div>
         </div>
 
-        <!-- ================= TAB 1: หน้าหลัก (Eco-Green) ================= -->
+        <!-- ================= TAB 1: หน้าหลัก ================= -->
         <div id="tab-main" class="tab-content active px-5 pb-5 custom-scroll">
             <div class="flex justify-between items-end mb-4 pb-4 border-b border-green-900/50">
                 <div>
@@ -165,8 +161,9 @@
                             <span class="text-[10px] font-bold text-white block mt-1 tracking-widest">AVG.</span>
                         </div>
                         <div class="flex justify-between w-full text-[8px] font-bold mt-auto pt-2 border-t border-green-900/50">
-                            <div class="text-left leading-tight text-white">MIN: <span class="eco-neon" id="aqi-min">--</span><br><span class="text-green-400 font-normal truncate block w-10">ทวีวัฒนา</span></div>
-                            <div class="text-right leading-tight text-white">MAX: <span class="eco-neon" id="aqi-max">--</span><br><span class="text-green-400 font-normal truncate block w-10">คลองเตย</span></div>
+                            <!-- ล้างชื่อที่ฮาร์ดโค้ดออก และรอแสดงผลจาก API -->
+                            <div class="text-left leading-tight text-white">MIN: <span class="eco-neon" id="aqi-min">--</span><br><span class="text-green-400 font-normal truncate block w-10" id="aqi-min-dist">--</span></div>
+                            <div class="text-right leading-tight text-white">MAX: <span class="eco-neon" id="aqi-max">--</span><br><span class="text-green-400 font-normal truncate block w-10" id="aqi-max-dist">--</span></div>
                         </div>
                     </div>
                 </div>
@@ -220,7 +217,7 @@
             </div>
         </div>
 
-        <!-- ================= TAB 2: พยากรณ์ 24 ชม. (แบ่งสี ฝนฟ้า / ร้อนส้ม) ================= -->
+        <!-- ================= TAB 2: พยากรณ์ 24 ชม. ================= -->
         <div id="tab-forecast" class="tab-content px-5 pb-5 custom-scroll">
             <div class="flex justify-between items-end mb-6 pb-4 border-b border-green-900/50">
                 <div>
@@ -235,7 +232,7 @@
                 </div>
             </div>
 
-            <!-- RAIN FORECAST (CYAN THEME) -->
+            <!-- RAIN FORECAST -->
             <div class="mb-6">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex flex-col text-left w-1/4 leading-tight">
@@ -269,14 +266,13 @@
                     </div>
                 </div>
 
-                <!-- กล่องกราฟฝน (ขอบฟ้า) -->
                 <div class="w-full p-2 pt-4 h-[150px] relative mt-4 border border-cyan-500/40 rounded-lg bg-cyan-500/5 shadow-[inset_0_0_15px_rgba(0,255,255,0.1)]">
                     <span class="text-[8px] font-bold text-cyan-400 absolute top-2 left-3 z-10">กราฟพยากรณ์โอกาสการเกิดฝน 24 ชม.</span>
                     <canvas id="chart-fc-rain"></canvas>
                 </div>
             </div>
 
-            <!-- HEAT FORECAST (AMBER THEME) -->
+            <!-- HEAT FORECAST -->
             <div class="mb-4 pt-6 border-t border-orange-900/50">
                 <div class="flex justify-between items-end mb-4">
                     <div class="flex items-baseline w-[40%]">
@@ -297,7 +293,6 @@
                     <div class="flex flex-col justify-end"><span class="text-[8px] font-normal text-orange-400 leading-tight mb-0.5">ความชื้น<br>สัมพัทธ์</span><span class="text-[17px] font-bold bio-amber oswald leading-none" id="fc-heat-rh">0%</span></div>
                 </div>
 
-                <!-- กล่องกราฟความร้อน (ขอบส้ม) -->
                 <div class="w-full p-2 pt-4 h-[150px] relative mt-4 border border-orange-500/40 rounded-lg bg-orange-500/5 shadow-[inset_0_0_15px_rgba(255,170,0,0.1)]">
                     <span class="text-[8px] font-bold text-orange-400 absolute top-2 left-3 z-10">กราฟพยากรณ์ดัชนีความร้อนเฉลี่ย 24 ชม.</span>
                     <canvas id="chart-fc-heat"></canvas>
@@ -305,13 +300,13 @@
             </div>
         </div>
 
-        <!-- ================= TAB 3: ฝนรายเขต (ฟ้า) ================= -->
+        <!-- ================= TAB 3: ฝนรายเขต ================= -->
         <div id="tab-rain-list" class="tab-content px-5 pb-5">
             <h2 class="text-2xl font-black neon-cyan oswald mb-3 border-b border-[#00ffff]/30 pb-1 tracking-widest">RAIN BY DISTRICT</h2>
             <div id="district-list" class="flex-grow overflow-y-auto list-scroll-cyan pr-2"></div>
         </div>
 
-        <!-- ================= TAB 4: ความร้อน (ส้ม) ================= -->
+        <!-- ================= TAB 4: ความร้อน ================= -->
         <div id="tab-heat-list" class="tab-content px-5 pb-5">
             <h2 class="text-2xl font-black bio-amber oswald mb-3 border-b border-[#ffaa00]/30 pb-1 tracking-widest">HEAT BY DISTRICT</h2>
             <div id="heat-list" class="flex-grow overflow-y-auto list-scroll-orange pr-2"></div>
@@ -375,13 +370,14 @@
                 const lats = bkkDistricts.map(d => d.lat).join(',');
                 const lons = bkkDistricts.map(d => d.lon).join(',');
                 
-                // ใช้ forecast_hours=24 สำหรับการพยากรณ์ 1 วันตามเดิม
+                // ดึงข้อมูล AQI จาก 50 เขต แบบ Array
+                const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lats}&longitude=${lons}&current=pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone,european_aqi&timezone=Asia/Bangkok`;
                 const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=precipitation,wind_speed_10m,wind_direction_10m,surface_pressure,temperature_2m,relative_humidity_2m,apparent_temperature,dew_point_2m&hourly=precipitation_probability,apparent_temperature,precipitation,wind_speed_10m,wind_direction_10m,dew_point_2m,temperature_2m,relative_humidity_2m&forecast_hours=24&timezone=Asia/Bangkok`;
+                
                 const res = await fetch(url);
                 if (!res.ok) throw new Error("API Limit");
                 const data = await res.json();
 
-                const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=13.75&longitude=100.50&current=pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone,european_aqi&timezone=Asia/Bangkok`;
                 const aqRes = await fetch(aqUrl);
                 if (!aqRes.ok) throw new Error("AQI API Limit");
                 const aqData = await aqRes.json();
@@ -422,7 +418,7 @@
                 if(heat > maxHeat.val) { maxHeat.val = heat; maxHeat.name = bkkDistricts[index].name; }
             });
             
-            let centerCur = apiData[0].current; let aq = aqData.current;
+            let centerCur = apiData[0].current; 
 
             document.getElementById('rain-percent').innerText = Math.round((rainingDistricts / 50) * 100);
             document.getElementById('rain-amount').innerText = maxRain.toFixed(1); 
@@ -432,17 +428,53 @@
             document.getElementById('p-dew').innerHTML = `${centerCur.dew_point_2m.toFixed(0)}<span class="text-sm font-normal text-white text-shadow-none">°C</span>`;
             document.getElementById('p-pressure').innerText = centerCur.surface_pressure.toFixed(0);
             
-            let baseAqi = aq.european_aqi || 0;
-            document.getElementById('p-aqi').innerHTML = `<span class="eco-neon tracking-tighter" style="font-size:4.5rem !important; font-weight:900; font-family:'Oswald', sans-serif;">${baseAqi || '--'}</span>`;
-            document.getElementById('aqi-min').innerText = baseAqi ? Math.max(0, baseAqi - 12) : "--";
-            document.getElementById('aqi-max').innerText = baseAqi ? baseAqi + 15 : "--";
+            // ดึงค่า AQI และมลพิษจาก 50 เขตจริง แทนการจำลองตัวเลข
+            let minAqi = { val: 999, name: "" }; 
+            let maxAqi = { val: -999, name: "" }; 
+            let sumAqi = 0;
+            let sumPm10 = 0, sumPm25 = 0, sumO3 = 0, sumNo2 = 0, sumCo = 0, sumSo2 = 0;
+            
+            let isAqArray = Array.isArray(aqData);
+            let centerAq = isAqArray ? aqData[0].current : aqData.current;
 
-            document.getElementById('p-pm10').innerText = aq.pm10 != null ? Math.round(aq.pm10) : "--";
-            document.getElementById('p-pm25').innerText = aq.pm2_5 != null ? Math.round(aq.pm2_5) : "--";
-            document.getElementById('p-o3').innerText = aq.ozone != null ? Math.round(aq.ozone) : "--";
-            document.getElementById('p-no2').innerText = aq.nitrogen_dioxide != null ? Math.round(aq.nitrogen_dioxide) : "--";
-            document.getElementById('p-co').innerText = aq.carbon_monoxide != null ? aq.carbon_monoxide.toFixed(0) : "--";
-            document.getElementById('p-so2').innerText = aq.sulphur_dioxide != null ? Math.round(aq.sulphur_dioxide) : "--";
+            if (isAqArray) {
+                aqData.forEach((site, index) => {
+                    let aqi = site.current.european_aqi || 0;
+                    sumAqi += aqi;
+                    sumPm10 += site.current.pm10 || 0;
+                    sumPm25 += site.current.pm2_5 || 0;
+                    sumO3 += site.current.ozone || 0;
+                    sumNo2 += site.current.nitrogen_dioxide || 0;
+                    sumCo += site.current.carbon_monoxide || 0;
+                    sumSo2 += site.current.sulphur_dioxide || 0;
+                    
+                    if(aqi < minAqi.val) { minAqi.val = aqi; minAqi.name = bkkDistricts[index].name; }
+                    if(aqi > maxAqi.val) { maxAqi.val = aqi; maxAqi.name = bkkDistricts[index].name; }
+                });
+            }
+
+            let baseAqi = isAqArray ? Math.round(sumAqi / 50) : (centerAq.european_aqi || 0);
+            document.getElementById('p-aqi').innerHTML = `<span class="eco-neon tracking-tighter" style="font-size:4.5rem !important; font-weight:900; font-family:'Oswald', sans-serif;">${baseAqi || '--'}</span>`;
+            
+            if (isAqArray && minAqi.val !== 999) {
+                document.getElementById('aqi-min').innerText = minAqi.val;
+                document.getElementById('aqi-min-dist').innerText = minAqi.name.replace('เขต', '');
+                document.getElementById('aqi-max').innerText = maxAqi.val;
+                document.getElementById('aqi-max-dist').innerText = maxAqi.name.replace('เขต', '');
+            } else {
+                document.getElementById('aqi-min').innerText = baseAqi ? Math.max(0, baseAqi - 12) : "--";
+                document.getElementById('aqi-min-dist').innerText = "--";
+                document.getElementById('aqi-max').innerText = baseAqi ? baseAqi + 15 : "--";
+                document.getElementById('aqi-max-dist').innerText = "--";
+            }
+
+            // คำนวณค่ามลพิษเฉลี่ยรวมทุกเขต
+            document.getElementById('p-pm10').innerText = isAqArray ? Math.round(sumPm10 / 50) : (centerAq.pm10 != null ? Math.round(centerAq.pm10) : "--");
+            document.getElementById('p-pm25').innerText = isAqArray ? Math.round(sumPm25 / 50) : (centerAq.pm2_5 != null ? Math.round(centerAq.pm2_5) : "--");
+            document.getElementById('p-o3').innerText = isAqArray ? Math.round(sumO3 / 50) : (centerAq.ozone != null ? Math.round(centerAq.ozone) : "--");
+            document.getElementById('p-no2').innerText = isAqArray ? Math.round(sumNo2 / 50) : (centerAq.nitrogen_dioxide != null ? Math.round(centerAq.nitrogen_dioxide) : "--");
+            document.getElementById('p-co').innerText = isAqArray ? Math.round(sumCo / 50) : (centerAq.carbon_monoxide != null ? Math.round(centerAq.carbon_monoxide) : "--");
+            document.getElementById('p-so2').innerText = isAqArray ? Math.round(sumSo2 / 50) : (centerAq.sulphur_dioxide != null ? Math.round(centerAq.sulphur_dioxide) : "--");
 
             let displayHeatAvg = Math.round(sumHeat / 50);
             document.getElementById('p-heat-avg').innerHTML = `<span class="eco-neon tracking-tighter" style="font-size:4rem !important; font-weight:900; font-family:'Oswald', sans-serif;">${displayHeatAvg}</span><span class="eco-neon text-lg font-bold oswald ml-0.5">°C</span>`;
@@ -459,7 +491,6 @@
             let maxP = { val: -1, time: "", dist: "", rain: 0, wind: 0, dir: 0, dew: 0, temp: 0, rh: 0 };
             let maxH = { val: -99, time: "", dist: "", wind: 0, dir: 0, dew: 0, temp: 0, rh: 0 };
 
-            // คำนวณเฉพาะ 24 ชั่วโมงล่วงหน้าเหมือนเดิม
             apiData.forEach((site, index) => {
                 for(let h=0; h<24; h++) {
                     let p = site.hourly.precipitation_probability[h];
@@ -500,8 +531,6 @@
             document.getElementById('fc-rain-rh').innerText = Math.round(maxP.rh) + "%";
 
             document.getElementById('fc-heat-val').innerText = maxH.val.toFixed(0);
-            // ให้หน้าตาโครงสร้าง HTML หน้าความร้อนกลับมาเหมือนหน้าฝนเป๊ะ
-            // เอาแท็ก id="fc-heat-time" ออกไปแล้ว และใช้โครงสร้างเดิมเพื่อไม่ให้เลย์เอาต์เบียด
             document.getElementById('fc-heat-dist').innerText = "เขต" + maxH.dist.replace('เขต', '');
             document.getElementById('fc-heat-wind').innerText = maxH.wind.toFixed(0);
             document.getElementById('fc-heat-dir').innerText = getWindDir(maxH.dir);
@@ -509,7 +538,6 @@
             document.getElementById('fc-heat-temp').innerText = Math.round(maxH.temp) + "°C";
             document.getElementById('fc-heat-rh').innerText = Math.round(maxH.rh) + "%";
 
-            // ข้อมูลกราฟ 24 ชม.
             let centerHourly = apiData[0].hourly;
             let times = centerHourly.time.map(t => new Date(t).toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'}));
             
@@ -551,7 +579,6 @@
                 };
             });
 
-            // หมวดฝน (ฟ้า-Cyan)
             let rainSorted = [...baseArr].sort((a, b) => b.rain - a.rain || b.wind - a.wind);
             rainSorted.forEach((site, index) => {
                 let statusRain = site.rain > 0 ? "100" : "0";
@@ -567,7 +594,6 @@
                 </div>`;
             });
 
-            // หมวดความร้อน (ส้ม-Amber)
             let heatSorted = [...baseArr].sort((a, b) => b.heat - a.heat);
             heatSorted.forEach((site, index) => {
                 heatContainer.innerHTML += `
